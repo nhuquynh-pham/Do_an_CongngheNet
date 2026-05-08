@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
+
+
 namespace Do_an_CongngheNET
 {
     /// <summary>
