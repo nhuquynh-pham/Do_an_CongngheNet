@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Do_an_CongngheNET
 {
-    public partial class Form1 : Form
+    public partial class Quanlyvaitronguoidung : Form
     {
-        public Form1()
+        public Quanlyvaitronguoidung()
         {
             InitializeComponent();
+        }
+
+        private void tlpButton_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
