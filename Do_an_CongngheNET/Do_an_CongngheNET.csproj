@@ -47,45 +47,60 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConstants.cs" />
-    <Compile Include="Chuyenphong.cs">
+    <Compile Include="Dangkyoxepphong.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Chuyenphong.Designer.cs">
-      <DependentUpon>Chuyenphong.cs</DependentUpon>
+    <Compile Include="Dangkyoxepphong.Designer.cs">
+      <DependentUpon>Dangkyoxepphong.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dangnhap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dangnhap.Designer.cs">
+      <DependentUpon>Dangnhap.cs</DependentUpon>
     </Compile>
     <Compile Include="DBService.cs" />
-    <Compile Include="Nhapdiennuoc.cs">
+    <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Nhapdiennuoc.Designer.cs">
-      <DependentUpon>Nhapdiennuoc.cs</DependentUpon>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quanlyphanquyen.cs">
+    <Compile Include="Quanlykhunha.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Quanlyphanquyen.Designer.cs">
-      <DependentUpon>Quanlyphanquyen.cs</DependentUpon>
+    <Compile Include="Quanlykhunha.Designer.cs">
+      <DependentUpon>Quanlykhunha.cs</DependentUpon>
     </Compile>
-    <Compile Include="Quanlyvaitronguoidung.cs">
+    <Compile Include="Quanlyphong.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Quanlyvaitronguoidung.Designer.cs">
-      <DependentUpon>Quanlyvaitronguoidung.cs</DependentUpon>
+    <Compile Include="Quanlyphong.Designer.cs">
+      <DependentUpon>Quanlyphong.cs</DependentUpon>
     </Compile>
-    <Compile Include="Traphong.cs">
+    <Compile Include="Quenmatkhau.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Traphong.Designer.cs">
-      <DependentUpon>Traphong.cs</DependentUpon>
+    <Compile Include="Quenmatkhau.Designer.cs">
+      <DependentUpon>Quenmatkhau.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Trangchu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Trangchu.Designer.cs">
+      <DependentUpon>Trangchu.cs</DependentUpon>
     </Compile>
     <Compile Include="UIService.cs" />
-    <EmbeddedResource Include="Chuyenphong.resx">
-      <DependentUpon>Chuyenphong.cs</DependentUpon>
+    <EmbeddedResource Include="Dangkyoxepphong.resx">
+      <DependentUpon>Dangkyoxepphong.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Nhapdiennuoc.resx">
-      <DependentUpon>Nhapdiennuoc.cs</DependentUpon>
+    <EmbeddedResource Include="Dangnhap.resx">
+      <DependentUpon>Dangnhap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -95,15 +110,19 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Quanlyphanquyen.resx">
-      <DependentUpon>Quanlyphanquyen.cs</DependentUpon>
+    <EmbeddedResource Include="Quanlykhunha.resx">
+      <DependentUpon>Quanlykhunha.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Quanlyvaitronguoidung.resx">
-      <DependentUpon>Quanlyvaitronguoidung.cs</DependentUpon>
+    <EmbeddedResource Include="Quanlyphong.resx">
+      <DependentUpon>Quanlyphong.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Traphong.resx">
-      <DependentUpon>Traphong.cs</DependentUpon>
+    <EmbeddedResource Include="Quenmatkhau.resx">
+      <DependentUpon>Quenmatkhau.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Trangchu.resx">
+      <DependentUpon>Trangchu.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -117,6 +136,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo-truong-dai-hoc-vinh.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

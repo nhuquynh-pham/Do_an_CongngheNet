@@ -13,17 +13,19 @@ namespace Do_an_CongngheNET
     {
         // khai báo xâu kết nối với CSDL
         private readonly string _connectionString;
+
         // ================================================================
         // 1. HÀM THIẾT LẬP ĐỂ GÁN XÂU KẾT NỐI VỚI CSDL
         // ================================================================
         public DBService()
         {
-            _connectionString = @"Data Source=DESKTOP-3KODLFH;Initial Catalog=QLKTX;Integrated Security=True";
+            _connectionString = @"Data Source=DESKTOP-UJLMR8A;Initial Catalog=QLKTX;Integrated Security=True;TrustServerCertificate=True";
         }
+
         // ================================================================
         // 2. HÀM THỰC HIỆN CÂU LỆNH SELECT ĐỂ TRUY VẤN DỮ LIỆU
         // ĐẦU VÀO: Một câu lệnh sql với các tham số định nghĩa
-        // ĐẦU RA: MỘT đối tượng lớp DataTable
+        // ĐẦU RA: Một đối tượng lớp DataTable
         // ================================================================
         public DataTable ExecuteQuery(string sql, params SqlParameter[] parameters)
         {
@@ -48,10 +50,11 @@ namespace Do_an_CongngheNET
             }
             return dt;
         }
+
         // ================================================================
-        // 3. HÀM THỰC HIỆN MÔT CÂU LỆNH INSERT/UPDATE/DELETE
+        // 3. HÀM THỰC HIỆN MỘT CÂU LỆNH INSERT/UPDATE/DELETE
         // ĐẦU VÀO: Một câu lệnh sql với các tham số định nghĩa
-        // ĐẦU RA: Không
+        // ĐẦU RA: Số dòng bị ảnh hưởng
         // ================================================================
         public int ExecuteNonQuery(string sql, params SqlParameter[] parameters)
         {
@@ -70,10 +73,11 @@ namespace Do_an_CongngheNET
                 }
             }
         }
+
         // ================================================================
-        // 4. HÀM THỰC HIỆN MÔT CÂU LỆNH SELECT VÀ TRẢ VỀ MỘT ĐỐI TƯƠNG
+        // 4. HÀM THỰC HIỆN MỘT CÂU LỆNH SELECT VÀ TRẢ VỀ MỘT ĐỐI TƯỢNG
         // ĐẦU VÀO: Một câu lệnh sql với các tham số định nghĩa
-        // ĐẦU RA: Không
+        // ĐẦU RA: Một giá trị object (dùng cho COUNT, MAX, ...)
         // ================================================================
         public object ExecuteScalar(string sql, params SqlParameter[] parameters)
         {

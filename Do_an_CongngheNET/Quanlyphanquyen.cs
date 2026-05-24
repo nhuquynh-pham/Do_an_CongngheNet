@@ -29,13 +29,21 @@ namespace Do_an_CongngheNET
             this.dgvQuanlyphanquyen.SelectionChanged += dgvQuanlyphanquyen_SelectionChanged;
             this.trvQuyenchucnang.AfterCheck += trvQuyenchucnang_AfterCheck;
         }
+
+        // ================================================================
+        // [Handler bắt buộc] - Designer dòng 440 đăng ký cho lblQuanlyphanquyen
+        // ================================================================
         private void label1_Click(object sender, EventArgs e)
         {
-
+            // Không cần xử lý - khai báo để tránh lỗi build
         }
+
+        // ================================================================
+        // [Handler bắt buộc] - Designer dòng 281 đăng ký cho lblThongtinphanquyen
+        // ================================================================
         private void lblThongtinphanquyen_Click(object sender, EventArgs e)
         {
-           
+            // Không cần xử lý - khai báo để tránh lỗi build
         }
 
         // ================================================================
@@ -193,9 +201,13 @@ namespace Do_an_CongngheNET
             LoadQuyenChuNang(_maTKDangChon);
             trvQuyenchucnang.Enabled = true;
         }
+
+        // ================================================================
+        // [Handler bắt buộc] - Designer dòng 509 đăng ký cho trvQuyenchucnang
+        // ================================================================
         private void trvQuyenchucnang_AfterSelect(object sender, TreeViewEventArgs e)
         {
-           
+            // Không cần xử lý – AfterCheck đảm nhận logic chính
         }
 
         // ================================================================
@@ -217,6 +229,10 @@ namespace Do_an_CongngheNET
                 SetCheckedAllChildren(child, isChecked);
             }
         }
+
+        // ================================================================
+        // [Handler bắt buộc] - Designer dòng 233 đăng ký cho txtSearch
+        // ================================================================
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
             LoadDanhSachTaiKhoan(txtSearch.Text.Trim());

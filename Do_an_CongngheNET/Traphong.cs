@@ -25,6 +25,7 @@ namespace Do_an_CongngheNET
         {
             InitializeComponent();
 
+            // Wire thủ công các event mà Designer KHÔNG tự đăng ký
             this.btnNew.Click += btnNew_Click;
             this.btnSave.Click += btnSave_Click;
             this.btnCancel.Click += btnCancel_Click;
@@ -36,26 +37,45 @@ namespace Do_an_CongngheNET
             this.txtMsv.Leave += txtMsv_Leave;
             this.cboKhunha.SelectedIndexChanged += cboKhunha_SelectedIndexChanged;
         }
+
+        // ================================================================
+        // [Handler bắt buộc] Designer dòng 121 - lblTitle.Click
+        // ================================================================
         private void lblTitle_Click(object sender, EventArgs e)
         {
-           
+            // Không cần xử lý
         }
 
+        // ================================================================
+        // [Handler bắt buộc] Designer dòng 100 - tlpRoot.Paint
+        // ================================================================
         private void tlpRoot_Paint(object sender, PaintEventArgs e)
         {
-         
+            // Không cần xử lý
         }
+
+        // ================================================================
+        // [Handler bắt buộc] Designer dòng 138 - tlpContent.Paint
+        // ================================================================
         private void tlpContent_Paint(object sender, PaintEventArgs e)
         {
-           
+            // Không cần xử lý
         }
+
+        // ================================================================
+        // [Handler bắt buộc] Designer dòng 331 - txtGhichu.TextChanged
+        // ================================================================
         private void txtGhichu_TextChanged(object sender, EventArgs e)
         {
-           
+            // Không cần xử lý
         }
+
+        // ================================================================
+        // [Handler bắt buộc] Designer dòng 541 - dgvTraphong.CellContentClick
+        // ================================================================
         private void dgvTraphong_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-          
+            // Không cần xử lý – SelectionChanged đảm nhận
         }
 
         // ================================================================

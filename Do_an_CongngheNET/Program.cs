@@ -16,7 +16,7 @@ namespace Do_an_CongngheNET
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Nhapdiennuoc());
+            Application.Run(new Quenmatkhau());
         }
     }
 }

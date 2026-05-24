@@ -5,59 +5,47 @@ using System.Data.SqlClient;
 
 namespace Do_an_CongngheNET
 {
-    public partial class Nhapdiennuoc : Form //Khai báo form nhapdiennuoc kế thừa từ form
+    public partial class Nhapdiennuoc : Form
     {
-        private readonly DBService _db; //Biến toàn cục dùng để kết nối db
-        private SaveMode _saveMode = SaveMode.Insert; //biến xác định đang thêm mới hay sửa dữ liệu
+        private readonly DBService _db;
+        private SaveMode _saveMode = SaveMode.Insert;
 
-        // Đơn giá điện và nước (có thể điều chỉnh theo thực tế)
-        private const int GIA_DIEN = 3500;  // VNĐ/kWh
-        private const int GIA_NUOC = 15000; // VNĐ/m³
+        private const int GIA_DIEN = 3500;
+        private const int GIA_NUOC = 15000;
 
-        public Nhapdiennuoc() //Khởi tạo form, đăng ký sự kiện
+        public Nhapdiennuoc()
         {
-            InitializeComponent(); //tạo giao diện form
-            _db = new DBService(); //tạo object để kết nối db
+            InitializeComponent();
+            _db = new DBService();
 
-            // Đăng ký sự kiện Load
             this.Load += Nhapdiennuoc_Load;
 
-            // Đăng ký sự kiện nút bấm
-            btnNew.Click += btnNew_Click; //khi click button new sẽ chạy hàm btn new click
+            btnNew.Click += btnNew_Click;
             btnEdit.Click += btnEdit_Click;
             btnDelete.Click += btnDelete_Click;
             btnSave.Click += btnSave_Click;
             btnCancel.Click += btnCancel_Click;
             btnClose.Click += btnClose_Click;
 
-            // ComboBox khu nhà → nạp phòng
             cboKhuNha.SelectedIndexChanged += cboKhuNha_SelectedIndexChanged;
-
-            // Grid chọn dòng → hiển thị lên ô nhập
             dgvNhapdiennuoc.SelectionChanged += dgvNhapdiennuoc_SelectionChanged;
-
-            // Tìm kiếm khi nhấn Enter
             txtSearch1.KeyDown += txtSearch1_KeyDown;
 
-            // Tự động tính tiêu thụ / tổng tiền
             txtChisodiencu.TextChanged += txtChisodiencu_TextChanged;
             txtChisodienmoi.TextChanged += txtChisodienmoi_TextChanged;
             txtChisonuoccu.TextChanged += txtChisonuoccu_TextChanged;
             txtChisonuocmoi.TextChanged += txtChisonuocmoi_TextChanged;
 
-            // Chỉ cho nhập số ở các ô số
             txtNam.KeyPress += txtSo_KeyPress;
             txtChisodiencu.KeyPress += txtSo_KeyPress;
             txtChisodienmoi.KeyPress += txtSo_KeyPress;
             txtChisonuoccu.KeyPress += txtSo_KeyPress;
             txtChisonuocmoi.KeyPress += txtSo_KeyPress;
 
-            // Di chuyển focus bằng Enter / mũi tên
             foreach (Control ctrl in this.Controls)
                 RegisterKeyDown(ctrl);
         }
 
-        // Đăng ký sự kiện KeyDown đệ quy cho tất cả TextBox
         private void RegisterKeyDown(Control parent)
         {
             foreach (Control ctrl in parent.Controls)
@@ -68,22 +56,23 @@ namespace Do_an_CongngheNET
             }
         }
 
-        // ===== KHỞI TẠO FORM =====
-
         private void Nhapdiennuoc_Load(object sender, EventArgs e)
         {
-            // Gán Tag cho các nút (theo logic UIService)
-            btnNew.Tag = "select";   // luôn sáng
+            txtSearch1.Tag = "AlwaysEnable";
+
+            btnNew.Tag = "select";
             btnEdit.Tag = "select";
             btnDelete.Tag = "select";
             btnClose.Tag = "select";
-            btnSave.Tag = "confirm";  // chỉ sáng khi đang thao tác
+            btnSave.Tag = "confirm";
             btnCancel.Tag = "confirm";
-            UIService.SetInputsEnabled(this, false);
+
             UIService.SetButtonsEnabled(this, false);
+            UIService.SetInputsEnabled(this, false);
+            UIService.SetInputsReadOnly(this, true);
+
             UIService.SetGridStyle(dgvNhapdiennuoc);
 
-            // 5 ô tự tính luôn ReadOnly
             txtDientieuthu.ReadOnly = true;
             txtNuoctieuthu.ReadOnly = true;
             txtTiendien.ReadOnly = true;
@@ -99,13 +88,16 @@ namespace Do_an_CongngheNET
                 "CS điện cũ", "CS điện mới", "Điện tiêu thụ",
                 "CS nước cũ", "CS nước mới", "Nước tiêu thụ",
                 "Tiền điện", "Tiền nước", "Tổng tiền");
-        }
 
-        // ===== NẠP COMBOBOX =====
+            // Ẩn 2 cột phụ MaKhu, MaPhong (không hiển thị nhưng dùng để bind)
+            if (dgvNhapdiennuoc.Columns.Contains("MaKhu"))
+                dgvNhapdiennuoc.Columns["MaKhu"].Visible = false;
+            if (dgvNhapdiennuoc.Columns.Contains("MaPhong"))
+                dgvNhapdiennuoc.Columns["MaPhong"].Visible = false;
+        }
 
         private void LoadKhuNha()
         {
-            // Bảng KhuNha có cột MaKhu và TenKhu
             string sql = "SELECT MaKhu, TenKhu FROM KhuNha ORDER BY TenKhu";
             DataTable dt = _db.ExecuteQuery(sql);
             cboKhuNha.DataSource = dt;
@@ -116,7 +108,6 @@ namespace Do_an_CongngheNET
 
         private void LoadPhong(string maKhu)
         {
-            // Bảng Phong có cột MaPhong, SoPhong, MaKhu
             string sql = @"SELECT MaPhong, SoPhong FROM Phong
                            WHERE MaKhu = @MaKhu ORDER BY SoPhong";
             DataTable dt = _db.ExecuteQuery(sql,
@@ -135,23 +126,23 @@ namespace Do_an_CongngheNET
             cboThang.SelectedIndex = -1;
         }
 
-        // ===== SỰ KIỆN NÚT =====
-
         private void btnNew_Click(object sender, EventArgs e)
         {
             _saveMode = SaveMode.Insert;
+
             UIService.ClearInputs(this);
-            UIService.SetInputsEnabled(this, true);
             UIService.SetButtonsEnabled(this, true);
+            UIService.SetInputsEnabled(this, true);
+            UIService.SetInputsReadOnly(this, false);
 
             txtDientieuthu.ReadOnly = true;
             txtNuoctieuthu.ReadOnly = true;
             txtTiendien.ReadOnly = true;
             txtTiennuoc.ReadOnly = true;
             txtTongtien.ReadOnly = true;
+
             txtMaphieu.ReadOnly = false;
 
-            // Mặc định tháng/năm hiện tại
             cboThang.SelectedItem = DateTime.Now.Month;
             txtNam.Text = DateTime.Now.Year.ToString();
 
@@ -163,20 +154,23 @@ namespace Do_an_CongngheNET
             if (dgvNhapdiennuoc.CurrentRow == null)
             {
                 MessageBox.Show("Vui lòng chọn một dòng để sửa!", "Thông báo",
-MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             _saveMode = SaveMode.Update;
-            UIService.SetInputsEnabled(this, true);
+
             UIService.SetButtonsEnabled(this, true);
+            UIService.SetInputsEnabled(this, true);
+            UIService.SetInputsReadOnly(this, false);
 
             txtDientieuthu.ReadOnly = true;
             txtNuoctieuthu.ReadOnly = true;
             txtTiendien.ReadOnly = true;
             txtTiennuoc.ReadOnly = true;
             txtTongtien.ReadOnly = true;
-            txtMaphieu.ReadOnly = true; // Không cho sửa mã phiếu
+
+            txtMaphieu.ReadOnly = true;
 
             txtChisodiencu.Focus();
         }
@@ -223,7 +217,6 @@ MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 int tienDien = Convert.ToInt32(txtTiendien.Text.Trim());
                 int tienNuoc = Convert.ToInt32(txtTiennuoc.Text.Trim());
 
-                // Tính tiêu thụ và tổng tiền
                 int dienTieuThu = csDienMoi - csDienCu;
                 int nuocTieuThu = csNuocMoi - csNuocCu;
                 int tongTien = tienDien + tienNuoc;
@@ -238,7 +231,7 @@ MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
                     InsertData(maPhieu, maPhong, thang, nam,
-csDienCu, csDienMoi, dienTieuThu,
+                               csDienCu, csDienMoi, dienTieuThu,
                                csNuocCu, csNuocMoi, nuocTieuThu,
                                tienDien, tienNuoc, tongTien);
                     MessageBox.Show("Thêm phiếu thành công!", "Thông báo",
@@ -255,8 +248,9 @@ csDienCu, csDienMoi, dienTieuThu,
                 }
 
                 LoadData();
-                UIService.SetInputsEnabled(this, false);
                 UIService.SetButtonsEnabled(this, false);
+                UIService.SetInputsEnabled(this, false);
+                UIService.SetInputsReadOnly(this, true);
             }
             catch (Exception ex)
             {
@@ -267,8 +261,9 @@ csDienCu, csDienMoi, dienTieuThu,
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            UIService.SetInputsEnabled(this, false);
             UIService.SetButtonsEnabled(this, false);
+            UIService.SetInputsEnabled(this, false);
+            UIService.SetInputsReadOnly(this, true);
             BindData();
         }
 
@@ -277,22 +272,17 @@ csDienCu, csDienMoi, dienTieuThu,
             Close();
         }
 
-        // ===== SỰ KIỆN COMBOBOX / GRID / TEXTBOX =====
-
-        // Chọn khu nhà → nạp lại phòng
         private void cboKhuNha_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboKhuNha.SelectedValue == null) return;
             LoadPhong(cboKhuNha.SelectedValue.ToString());
         }
 
-        // Chọn dòng lưới → hiển thị lên ô nhập
         private void dgvNhapdiennuoc_SelectionChanged(object sender, EventArgs e)
         {
             BindData();
         }
 
-        // Tìm kiếm khi nhấn Enter
         private void txtSearch1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -303,20 +293,16 @@ csDienCu, csDienMoi, dienTieuThu,
             }
         }
 
-        // Di chuyển focus khi nhấn Enter / mũi tên
         private void txt_KeyDown(object sender, KeyEventArgs e)
         {
             UIService.MoveFocus((Control)sender, e);
         }
 
-        // Chỉ cho nhập số
         private void txtSo_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 e.Handled = true;
         }
-
-        // ===== TỰ ĐỘNG TÍNH =====
 
         private void txtChisodiencu_TextChanged(object sender, EventArgs e) => TinhDienTieuthu();
         private void txtChisodienmoi_TextChanged(object sender, EventArgs e) => TinhDienTieuthu();
@@ -367,8 +353,6 @@ csDienCu, csDienMoi, dienTieuThu,
             txtTongtien.Text = (d + n).ToString();
         }
 
-        // ===== VALIDATE =====
-
         private bool ValidateInput()
         {
             if (!UIService.Require(txtMaphieu, "Yêu cầu phải nhập mã phiếu!"))
@@ -379,8 +363,6 @@ csDienCu, csDienMoi, dienTieuThu,
                 return false;
             if (!UIService.Require(cboThang, "Yêu cầu phải chọn tháng!"))
                 return false;
-
-            // (Tiền điện và tiền nước được tính tự động, không cần validate thủ công)
 
             int nam;
             if (!int.TryParse(txtNam.Text.Trim(), out nam) || nam < 2000)
@@ -430,22 +412,30 @@ csDienCu, csDienMoi, dienTieuThu,
             return true;
         }
 
-        // ===== TẢI & HIỂN THỊ DỮ LIỆU =====
-
+        // ===== FIX 2: LoadData - thêm CurrentCell để grid thực sự chọn dòng đầu =====
         private void LoadData()
         {
-            string keyword = txtSearch1.Text.Trim();
+            try
+            {
+                string keyword = txtSearch1.Text.Trim();
 
-            // Tạm tắt sự kiện SelectionChanged để tránh BindData chạy liên tục khi load
-            dgvNhapdiennuoc.SelectionChanged -= dgvNhapdiennuoc_SelectionChanged;
-            dgvNhapdiennuoc.DataSource = SearchData(keyword);
-            dgvNhapdiennuoc.SelectionChanged += dgvNhapdiennuoc_SelectionChanged;
+                dgvNhapdiennuoc.SelectionChanged -= dgvNhapdiennuoc_SelectionChanged;
+                dgvNhapdiennuoc.DataSource = SearchData(keyword);
+                dgvNhapdiennuoc.SelectionChanged += dgvNhapdiennuoc_SelectionChanged;
 
-            // Hiển thị dòng đầu tiên nếu có
-            if (dgvNhapdiennuoc.Rows.Count > 0)
-                dgvNhapdiennuoc.Rows[0].Selected = true;
+                if (dgvNhapdiennuoc.Rows.Count > 0)
+                {
+                    dgvNhapdiennuoc.Rows[0].Selected = true;
+                    dgvNhapdiennuoc.CurrentCell = dgvNhapdiennuoc.Rows[0].Cells[0];
+                }
 
-            BindData();
+                BindData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi LoadData: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BindData()
@@ -458,7 +448,6 @@ csDienCu, csDienMoi, dienTieuThu,
 
             var row = dgvNhapdiennuoc.CurrentRow;
 
-            // Tắt sự kiện TextChanged khi gán để tránh tính toán sai
             txtChisodiencu.TextChanged -= txtChisodiencu_TextChanged;
             txtChisodienmoi.TextChanged -= txtChisodienmoi_TextChanged;
             txtChisonuoccu.TextChanged -= txtChisonuoccu_TextChanged;
@@ -476,17 +465,14 @@ csDienCu, csDienMoi, dienTieuThu,
             txtTiennuoc.Text = GetCellValue(row, "TienNuoc");
             txtTongtien.Text = GetCellValue(row, "TongTien");
 
-            // Bật lại sự kiện
             txtChisodiencu.TextChanged += txtChisodiencu_TextChanged;
             txtChisodienmoi.TextChanged += txtChisodienmoi_TextChanged;
             txtChisonuoccu.TextChanged += txtChisonuoccu_TextChanged;
             txtChisonuocmoi.TextChanged += txtChisonuocmoi_TextChanged;
 
-            // Gán ComboBox khu nhà và phòng
             string maKhu = GetCellValue(row, "MaKhu");
             string maPhong = GetCellValue(row, "MaPhong");
 
-            // Tắt sự kiện SelectedIndexChanged khi gán để tránh LoadPhong bị gọi 2 lần
             cboKhuNha.SelectedIndexChanged -= cboKhuNha_SelectedIndexChanged;
             cboKhuNha.SelectedValue = maKhu;
             cboKhuNha.SelectedIndexChanged += cboKhuNha_SelectedIndexChanged;
@@ -494,7 +480,6 @@ csDienCu, csDienMoi, dienTieuThu,
             LoadPhong(maKhu);
             cboPhong.SelectedValue = maPhong;
 
-            // Gán tháng
             int thang;
             if (int.TryParse(GetCellValue(row, "Thang"), out thang))
                 cboThang.SelectedItem = thang;
@@ -514,7 +499,6 @@ csDienCu, csDienMoi, dienTieuThu,
 
         private DataTable SearchData(string keyword = "")
         {
-            // Bảng DienNuoc, join Phong → KhuNha để lấy TenKhu, SoPhong
             string sql = @"
                 SELECT d.MaPhieu,
                        k.TenKhu,
@@ -546,8 +530,6 @@ csDienCu, csDienMoi, dienTieuThu,
             return _db.ExecuteQuery(sql,
                 new SqlParameter("@Keyword", "%" + keyword + "%"));
         }
-
-        // ===== THAO TÁC CSDL =====
 
         private bool MaPhieuExists(string maPhieu)
         {
@@ -614,7 +596,7 @@ csDienCu, csDienMoi, dienTieuThu,
 
             _db.ExecuteNonQuery(sql,
                 new SqlParameter("@MaPhieu", maPhieu),
-new SqlParameter("@MaPhong", maPhong),
+                new SqlParameter("@MaPhong", maPhong),
                 new SqlParameter("@Thang", thang),
                 new SqlParameter("@Nam", nam),
                 new SqlParameter("@ChiSoDienCu", csDienCu),
@@ -638,11 +620,6 @@ new SqlParameter("@MaPhong", maPhong),
         {
             if (dgvNhapdiennuoc.CurrentRow == null) return "";
             return GetCellValue(dgvNhapdiennuoc.CurrentRow, "MaPhieu");
-        }
-
-        private void cboKhuNha_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
