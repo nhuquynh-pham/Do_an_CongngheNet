@@ -8,66 +8,70 @@ namespace Do_an_CongngheNET
 {
     public partial class Dangnhap : Form
     {
-        // khai báo đối tượng _db - giống thầy: private readonly DBService _db
+        // ----------------------------------------------------------------
+        // 1. KHAI BÁO BIẾN
+        // ----------------------------------------------------------------
         private readonly DBService _db;
 
+        // ----------------------------------------------------------------
+        // 2. CONSTRUCTOR
+        // ----------------------------------------------------------------
         public Dangnhap()
         {
             InitializeComponent();
-            // tạo đối tượng _db trong constructor - giống thầy
             _db = new DBService();
-
-            KhoiTaoForm();
+            InitForm();
         }
 
         // ================================================================
-        // KHỞI TẠO FORM
+        // PHẦN A – KHỞI TẠO FORM
         // ================================================================
-        private void KhoiTaoForm()
+
+        private void InitForm()
         {
-            // style cho lblDangnhap như nút bấm
+            // Style cho lblDangnhap như nút bấm
             lblDangnhap.Cursor = Cursors.Hand;
             lblDangnhap.ForeColor = Color.White;
             lblDangnhap.BackColor = Color.SteelBlue;
 
-            // style cho lblQuenmk như link
+            // Style cho lblQuenmk như hyperlink
             lblQuenmk.Cursor = Cursors.Hand;
             lblQuenmk.ForeColor = Color.Blue;
             lblQuenmk.Font = new Font(lblQuenmk.Font, FontStyle.Underline);
 
-            // đăng ký sự kiện
-            lblDangnhap.Click += new EventHandler(lblDangnhap_Click);
-            lblQuenmk.Click += new EventHandler(lblQuenmk_Click);
+            // Đăng ký sự kiện
+            lblDangnhap.Click += lblDangnhap_Click;
+            lblQuenmk.Click += lblQuenmk_Click;
 
-            txtuser.KeyDown += new KeyEventHandler(txtuser_KeyDown);
-            textkey.KeyDown += new KeyEventHandler(textkey_KeyDown);
+            txtuser.KeyDown += txtuser_KeyDown;
+            textkey.KeyDown += textkey_KeyDown;
 
-            // [UIService.MoveFocus] điều hướng bàn phím Enter/Down/Up
-            txtuser.KeyDown += (s, ke) => UIService.MoveFocus((Control)s, ke);
+            chkHienthimk.CheckedChanged += chkHienthimk_CheckedChanged;
+            chkGhinhodn.CheckedChanged += chkGhinhodn_CheckedChanged;
+
+            // Mặc định: ẩn mật khẩu
+            textkey.PasswordChar = '*';
+
+            // Focus vào ô tên đăng nhập
+            txtuser.Focus();
         }
 
         // ================================================================
-        // NÚT ĐĂNG NHẬP
+        // PHẦN B – XỬ LÝ ĐĂNG NHẬP
         // ================================================================
+
         private void lblDangnhap_Click(object sender, EventArgs e)
         {
-            // [UIService.Require] kiểm tra bắt buộc nhập
+            // Kiểm tra bắt buộc nhập
             if (!UIService.Require(txtuser, "Vui lòng nhập tên đăng nhập!")) return;
             if (!UIService.Require(textkey, "Vui lòng nhập mật khẩu!")) return;
 
-            // [UIService.MaxLength] kiểm tra độ dài tối đa
+            // Kiểm tra độ dài tối đa
             if (!UIService.MaxLength(txtuser, 50, "Tên đăng nhập không được quá 50 ký tự!")) return;
             if (!UIService.MaxLength(textkey, 50, "Mật khẩu không được quá 50 ký tự!")) return;
 
-            string sql = @"SELECT * FROM TaiKhoan
-               WHERE TenDangNhap = @TenDangNhap
-               AND MatKhau = @MatKhau
-               AND TrangThai = N'Hoạt động'";
-
-            // _db.ExecuteQuery - giống thầy
-            DataTable dt = _db.ExecuteQuery(sql,
-                new SqlParameter("@TenDangNhap", txtuser.Text.Trim()),
-                new SqlParameter("@MatKhau", textkey.Text.Trim()));
+            // Truy vấn tài khoản
+            DataTable dt = GetAccount(txtuser.Text.Trim(), textkey.Text.Trim());
 
             if (dt == null || dt.Rows.Count == 0)
             {
@@ -75,28 +79,42 @@ namespace Do_an_CongngheNET
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 textkey.Clear();
                 textkey.Focus();
+                return;
             }
-            else
-            {
-                MessageBox.Show("Đăng nhập hệ thống thành công!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // lấy tên đăng nhập của tài khoản
-                string tenDangNhap = dt.Rows[0]["TenDangNhap"].ToString();
+            MessageBox.Show("Đăng nhập hệ thống thành công!",
+                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Mở form chính sau khi đăng nhập thành công
-                frmMain frm = new frmMain();
-                this.Hide();
-                frm.Show();
-            }
+            // Mở form chính
+            frmMain frm = new frmMain();
+            this.Hide();
+            frm.Show();
         }
 
         // ================================================================
-        // ĐIỀU HƯỚNG BÀN PHÍM
+        // PHẦN C – HÀM HELPER
         // ================================================================
+
+        /// <summary>Truy vấn tài khoản theo tên đăng nhập và mật khẩu</summary>
+        private DataTable GetAccount(string tenDangNhap, string matKhau)
+        {
+            string sql = @"SELECT * FROM tblTAIKHOAN
+                           WHERE TenDangNhap = @TenDangNhap
+                             AND MatKhau     = @MatKhau
+                             AND TrangThai   = N'Hoạt động'";
+
+            return _db.ExecuteQuery(sql,
+                new SqlParameter("@TenDangNhap", tenDangNhap),
+                new SqlParameter("@MatKhau", matKhau));
+        }
+
+        // ================================================================
+        // PHẦN D – XỬ LÝ SỰ KIỆN CONTROL
+        // ================================================================
+
         private void txtuser_KeyDown(object sender, KeyEventArgs e)
         {
-            // Enter -> chuyển xuống ô mật khẩu
+            // Enter / mũi tên xuống -> chuyển sang ô mật khẩu
             if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Down)
             {
                 textkey.Focus();
@@ -112,7 +130,7 @@ namespace Do_an_CongngheNET
                 lblDangnhap_Click(sender, e);
                 e.Handled = true;
             }
-            // mũi tên lên -> quay lại ô tên đăng nhập
+            // Mũi tên lên -> quay lại ô tên đăng nhập
             else if (e.KeyCode == Keys.Up)
             {
                 txtuser.Focus();
@@ -120,9 +138,6 @@ namespace Do_an_CongngheNET
             }
         }
 
-        // ================================================================
-        // HIỆN / ẨN MẬT KHẨU
-        // ================================================================
         private void chkHienthimk_CheckedChanged(object sender, EventArgs e)
         {
             textkey.PasswordChar = chkHienthimk.Checked ? '\0' : '*';
@@ -130,15 +145,21 @@ namespace Do_an_CongngheNET
 
         private void chkGhinhodn_CheckedChanged(object sender, EventArgs e) { }
 
-        // ================================================================
-        // QUÊN MẬT KHẨU
-        // ================================================================
         private void lblQuenmk_Click(object sender, EventArgs e)
         {
-            Quenmatkhau frmQMK = new Quenmatkhau();
-            frmQMK.Show();
-            this.Hide();
+            // TODO: Thêm form Quenmatkhau vào project rồi bỏ comment đoạn dưới
+            MessageBox.Show("Chức năng quên mật khẩu chưa được cài đặt.",
+                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Khi đã có form Quenmatkhau, thay bằng:
+            // Quenmatkhau frmQMK = new Quenmatkhau();
+            // this.Hide();
+            // frmQMK.Show();
         }
+
+        // ================================================================
+        // PHẦN E – STUB HANDLER DO DESIGNER YÊU CẦU
+        // ================================================================
 
         private void tlpHeader_Paint(object sender, PaintEventArgs e) { }
         private void tlpContent4_Paint(object sender, PaintEventArgs e) { }

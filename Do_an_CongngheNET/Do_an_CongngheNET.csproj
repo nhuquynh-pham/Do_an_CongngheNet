@@ -86,12 +86,6 @@
     <Compile Include="Quenmatkhau.Designer.cs">
       <DependentUpon>Quenmatkhau.cs</DependentUpon>
     </Compile>
-    <Compile Include="Trangchu.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Trangchu.Designer.cs">
-      <DependentUpon>Trangchu.cs</DependentUpon>
-    </Compile>
     <Compile Include="UIService.cs" />
     <EmbeddedResource Include="Dangkyoxepphong.resx">
       <DependentUpon>Dangkyoxepphong.cs</DependentUpon>
@@ -120,9 +114,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Quenmatkhau.resx">
       <DependentUpon>Quenmatkhau.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Trangchu.resx">
-      <DependentUpon>Trangchu.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

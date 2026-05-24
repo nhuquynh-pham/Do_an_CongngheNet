@@ -2,15 +2,8 @@
 {
     partial class Quanlyphong
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,10 +15,6 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.tlpRoot = new System.Windows.Forms.TableLayoutPanel();
@@ -99,8 +88,10 @@
             // 
             // pnlHeader
             // 
+            this.pnlHeader.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlHeader.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.pnlHeader.Location = new System.Drawing.Point(6, 6);
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(989, 53);
@@ -110,10 +101,12 @@
             // 
             this.lblTitle.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.BackColor = System.Drawing.Color.White;
+            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lblTitle.Location = new System.Drawing.Point(383, 12);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(247, 32);
+            this.lblTitle.Size = new System.Drawing.Size(260, 32);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "QUẢN LÝ PHÒNG";
             // 
@@ -196,6 +189,7 @@
             // 
             this.lblMaphong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblMaphong.AutoSize = true;
+            this.lblMaphong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblMaphong.Location = new System.Drawing.Point(7, 6);
             this.lblMaphong.Name = "lblMaphong";
             this.lblMaphong.Size = new System.Drawing.Size(106, 25);
@@ -205,6 +199,7 @@
             // txtMaphong
             // 
             this.txtMaphong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtMaphong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.txtMaphong.Location = new System.Drawing.Point(124, 4);
             this.txtMaphong.Name = "txtMaphong";
             this.txtMaphong.Size = new System.Drawing.Size(256, 30);
@@ -214,6 +209,7 @@
             // 
             this.lblSophong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSophong.AutoSize = true;
+            this.lblSophong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblSophong.Location = new System.Drawing.Point(9, 44);
             this.lblSophong.Name = "lblSophong";
             this.lblSophong.Size = new System.Drawing.Size(103, 25);
@@ -223,6 +219,7 @@
             // txtSophong
             // 
             this.txtSophong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSophong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.txtSophong.Location = new System.Drawing.Point(124, 42);
             this.txtSophong.Name = "txtSophong";
             this.txtSophong.Size = new System.Drawing.Size(256, 30);
@@ -231,8 +228,9 @@
             // cboKhunha
             // 
             this.cboKhunha.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboKhunha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.cboKhunha.FormattingEnabled = true;
-            this.cboKhunha.Location = new System.Drawing.Point(124, 79);
+            this.cboKhunha.Location = new System.Drawing.Point(124, 83);
             this.cboKhunha.Name = "cboKhunha";
             this.cboKhunha.Size = new System.Drawing.Size(256, 33);
             this.cboKhunha.TabIndex = 4;
@@ -241,6 +239,7 @@
             // 
             this.lblKhunha.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblKhunha.AutoSize = true;
+            this.lblKhunha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblKhunha.Location = new System.Drawing.Point(14, 82);
             this.lblKhunha.Name = "lblKhunha";
             this.lblKhunha.Size = new System.Drawing.Size(92, 25);
@@ -251,6 +250,7 @@
             // 
             this.lblTang.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTang.AutoSize = true;
+            this.lblTang.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblTang.Location = new System.Drawing.Point(28, 120);
             this.lblTang.Name = "lblTang";
             this.lblTang.Size = new System.Drawing.Size(64, 25);
@@ -261,6 +261,7 @@
             // 
             this.lblLoaiphong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblLoaiphong.AutoSize = true;
+            this.lblLoaiphong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblLoaiphong.Location = new System.Drawing.Point(3, 158);
             this.lblLoaiphong.Name = "lblLoaiphong";
             this.lblLoaiphong.Size = new System.Drawing.Size(115, 25);
@@ -270,8 +271,9 @@
             // cboTang
             // 
             this.cboTang.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboTang.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.cboTang.FormattingEnabled = true;
-            this.cboTang.Location = new System.Drawing.Point(124, 121);
+            this.cboTang.Location = new System.Drawing.Point(124, 117);
             this.cboTang.Name = "cboTang";
             this.cboTang.Size = new System.Drawing.Size(256, 33);
             this.cboTang.TabIndex = 4;
@@ -279,19 +281,19 @@
             // cboLoaiphong
             // 
             this.cboLoaiphong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboLoaiphong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.cboLoaiphong.FormattingEnabled = true;
-            this.cboLoaiphong.Items.AddRange(new object[] {
-            "Phòng 4 người",
-            "Phòng 6 người"});
-            this.cboLoaiphong.Location = new System.Drawing.Point(124, 159);
+            this.cboLoaiphong.Location = new System.Drawing.Point(124, 155);
             this.cboLoaiphong.Name = "cboLoaiphong";
             this.cboLoaiphong.Size = new System.Drawing.Size(256, 33);
             this.cboLoaiphong.TabIndex = 4;
+            this.cboLoaiphong.SelectedIndexChanged += new System.EventHandler(this.cboLoaiphong_SelectedIndexChanged);
             // 
             // lblGhichu
             // 
             this.lblGhichu.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblGhichu.AutoSize = true;
+            this.lblGhichu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblGhichu.Location = new System.Drawing.Point(18, 391);
             this.lblGhichu.Name = "lblGhichu";
             this.lblGhichu.Size = new System.Drawing.Size(85, 25);
@@ -301,6 +303,7 @@
             // txtGhichu
             // 
             this.txtGhichu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGhichu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.txtGhichu.Location = new System.Drawing.Point(124, 388);
             this.txtGhichu.Name = "txtGhichu";
             this.txtGhichu.Size = new System.Drawing.Size(256, 30);
@@ -310,6 +313,7 @@
             // 
             this.lblTrangthai.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTrangthai.AutoSize = true;
+            this.lblTrangthai.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblTrangthai.Location = new System.Drawing.Point(7, 348);
             this.lblTrangthai.Name = "lblTrangthai";
             this.lblTrangthai.Size = new System.Drawing.Size(106, 25);
@@ -319,13 +323,9 @@
             // cboTrangthai
             // 
             this.cboTrangthai.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboTrangthai.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.cboTrangthai.FormattingEnabled = true;
-            this.cboTrangthai.Items.AddRange(new object[] {
-            "Còn chỗ",
-            "Bảo trì",
-            "Ngưng sử dụng",
-            "Đang sử dụng"});
-            this.cboTrangthai.Location = new System.Drawing.Point(124, 349);
+            this.cboTrangthai.Location = new System.Drawing.Point(124, 345);
             this.cboTrangthai.Name = "cboTrangthai";
             this.cboTrangthai.Size = new System.Drawing.Size(256, 33);
             this.cboTrangthai.TabIndex = 4;
@@ -334,6 +334,7 @@
             // 
             this.lblGioitinh.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblGioitinh.AutoSize = true;
+            this.lblGioitinh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblGioitinh.Location = new System.Drawing.Point(16, 310);
             this.lblGioitinh.Name = "lblGioitinh";
             this.lblGioitinh.Size = new System.Drawing.Size(88, 25);
@@ -343,12 +344,9 @@
             // cboGioitinh
             // 
             this.cboGioitinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboGioitinh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.cboGioitinh.FormattingEnabled = true;
-            this.cboGioitinh.Items.AddRange(new object[] {
-            "Nam",
-            "Nữ",
-            "Khác"});
-            this.cboGioitinh.Location = new System.Drawing.Point(124, 311);
+            this.cboGioitinh.Location = new System.Drawing.Point(124, 307);
             this.cboGioitinh.Name = "cboGioitinh";
             this.cboGioitinh.Size = new System.Drawing.Size(256, 33);
             this.cboGioitinh.TabIndex = 4;
@@ -357,6 +355,7 @@
             // 
             this.lblGiaphong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblGiaphong.AutoSize = true;
+            this.lblGiaphong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblGiaphong.Location = new System.Drawing.Point(6, 272);
             this.lblGiaphong.Name = "lblGiaphong";
             this.lblGiaphong.Size = new System.Drawing.Size(108, 25);
@@ -366,6 +365,7 @@
             // txtGiaphong
             // 
             this.txtGiaphong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGiaphong.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.txtGiaphong.Location = new System.Drawing.Point(124, 270);
             this.txtGiaphong.Name = "txtGiaphong";
             this.txtGiaphong.Size = new System.Drawing.Size(256, 30);
@@ -375,6 +375,7 @@
             // 
             this.lblSonguoio.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSonguoio.AutoSize = true;
+            this.lblSonguoio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblSonguoio.Location = new System.Drawing.Point(4, 234);
             this.lblSonguoio.Name = "lblSonguoio";
             this.lblSonguoio.Size = new System.Drawing.Size(112, 25);
@@ -384,6 +385,7 @@
             // txtSonguoio
             // 
             this.txtSonguoio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSonguoio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.txtSonguoio.Location = new System.Drawing.Point(124, 232);
             this.txtSonguoio.Name = "txtSonguoio";
             this.txtSonguoio.Size = new System.Drawing.Size(256, 30);
@@ -392,6 +394,7 @@
             // txtSucchua
             // 
             this.txtSucchua.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSucchua.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.txtSucchua.Location = new System.Drawing.Point(124, 194);
             this.txtSucchua.Name = "txtSucchua";
             this.txtSucchua.Size = new System.Drawing.Size(256, 30);
@@ -401,6 +404,7 @@
             // 
             this.lblSucchua.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSucchua.AutoSize = true;
+            this.lblSucchua.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblSucchua.Location = new System.Drawing.Point(10, 196);
             this.lblSucchua.Name = "lblSucchua";
             this.lblSucchua.Size = new System.Drawing.Size(101, 25);
@@ -440,6 +444,7 @@
             this.btnNew.TabIndex = 0;
             this.btnNew.Text = "Thêm mới";
             this.btnNew.UseVisualStyleBackColor = false;
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
             // btnEdit
             // 
@@ -453,6 +458,7 @@
             this.btnEdit.TabIndex = 0;
             this.btnEdit.Text = "Sửa";
             this.btnEdit.UseVisualStyleBackColor = false;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // btnDelete
             // 
@@ -466,6 +472,7 @@
             this.btnDelete.TabIndex = 0;
             this.btnDelete.Text = "Xóa";
             this.btnDelete.UseVisualStyleBackColor = false;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // btnClose
             // 
@@ -479,6 +486,7 @@
             this.btnClose.TabIndex = 0;
             this.btnClose.Text = "Kết thúc";
             this.btnClose.UseVisualStyleBackColor = false;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnCancel
             // 
@@ -492,6 +500,7 @@
             this.btnCancel.TabIndex = 0;
             this.btnCancel.Text = "Hủy ghi";
             this.btnCancel.UseVisualStyleBackColor = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
@@ -505,6 +514,7 @@
             this.btnSave.TabIndex = 0;
             this.btnSave.Text = "Ghi";
             this.btnSave.UseVisualStyleBackColor = false;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // tlpRight
             // 
@@ -540,6 +550,7 @@
             // 
             this.lblTimkiem.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTimkiem.AutoSize = true;
+            this.lblTimkiem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(55)))), ((int)(((byte)(72)))));
             this.lblTimkiem.Location = new System.Drawing.Point(3, 12);
             this.lblTimkiem.Name = "lblTimkiem";
             this.lblTimkiem.Size = new System.Drawing.Size(226, 25);
@@ -549,10 +560,12 @@
             // txtTimkiem
             // 
             this.txtTimkiem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTimkiem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(113)))), ((int)(((byte)(128)))), ((int)(((byte)(150)))));
             this.txtTimkiem.Location = new System.Drawing.Point(235, 10);
             this.txtTimkiem.Name = "txtTimkiem";
             this.txtTimkiem.Size = new System.Drawing.Size(344, 30);
             this.txtTimkiem.TabIndex = 1;
+            this.txtTimkiem.TextChanged += new System.EventHandler(this.txtTimkiem_TextChanged);
             // 
             // pnlGrid
             // 
@@ -565,6 +578,7 @@
             // 
             // dgvQuanlyphong
             // 
+            this.dgvQuanlyphong.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dgvQuanlyphong.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvQuanlyphong.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvQuanlyphong.Location = new System.Drawing.Point(0, 0);
@@ -573,11 +587,14 @@
             this.dgvQuanlyphong.RowTemplate.Height = 24;
             this.dgvQuanlyphong.Size = new System.Drawing.Size(582, 468);
             this.dgvQuanlyphong.TabIndex = 0;
+            this.dgvQuanlyphong.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvQuanlyphong_CellContentClick);
+            this.dgvQuanlyphong.SelectionChanged += new System.EventHandler(this.dgvQuanlyphong_SelectionChanged);
             // 
             // Quanlyphong
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(1001, 610);
             this.Controls.Add(this.tlpRoot);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -586,6 +603,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Quanlyphong";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.Quanlyphong_Load);
             this.tlpRoot.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();

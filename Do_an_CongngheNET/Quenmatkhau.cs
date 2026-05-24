@@ -8,17 +8,21 @@ namespace Do_an_CongngheNET
 {
     public partial class Quenmatkhau : Form
     {
-        // khai báo đối tượng _db - giống thầy: private readonly DBService _db
+        // ----------------------------------------------------------------
+        // KHAI BÁO
+        // ----------------------------------------------------------------
         private readonly DBService _db;
 
         // lưu OTP đã sinh và tên đăng nhập tìm được
         private string _otpHienTai = "";
         private string _tenDangNhapTimDuoc = "";
 
+        // ----------------------------------------------------------------
+        // CONSTRUCTOR
+        // ----------------------------------------------------------------
         public Quenmatkhau()
         {
             InitializeComponent();
-            // tạo đối tượng _db trong constructor - giống thầy
             _db = new DBService();
 
             KhoiTaoForm();
@@ -33,29 +37,31 @@ namespace Do_an_CongngheNET
             txtMatkhau.PasswordChar = '*';
             txtNhaplaimk.PasswordChar = '*';
 
-            // style cho lblGuima như nút bấm
+            // style lblGuima – dạng link bấm
             lblGuima.Cursor = Cursors.Hand;
             lblGuima.ForeColor = Color.Blue;
             lblGuima.Font = new Font(lblGuima.Font, FontStyle.Underline);
 
-            // style cho lblXacnhanmk như nút bấm
+            // style lblXacnhanmk – dạng nút xác nhận
             lblXacnhanmk.Cursor = Cursors.Hand;
             lblXacnhanmk.ForeColor = Color.White;
             lblXacnhanmk.BackColor = Color.SteelBlue;
 
-            // style cho lblQuaylaidangnhap như link
+            // style lblQuaylaidangnhap – dạng link
             lblQuaylaidangnhap.Cursor = Cursors.Hand;
             lblQuaylaidangnhap.ForeColor = Color.Blue;
             lblQuaylaidangnhap.Font = new Font(lblQuaylaidangnhap.Font, FontStyle.Underline);
 
-            // đăng ký sự kiện
-            lblGuima.Click += new EventHandler(lblGuima_Click);
-            lblXacnhanmk.Click += new EventHandler(lblXacnhanmk_Click);
-            lblQuaylaidangnhap.Click += new EventHandler(lblQuaylaidangnhap_Click);
-            chkMatkhau.CheckedChanged += new EventHandler(chkMatkhau_CheckedChanged);
-            chkNhaplaimk.CheckedChanged += new EventHandler(chkNhaplaimk_CheckedChanged);
+            // đăng ký sự kiện click
+            lblGuima.Click += lblGuima_Click;
+            lblXacnhanmk.Click += lblXacnhanmk_Click;
+            lblQuaylaidangnhap.Click += lblQuaylaidangnhap_Click;
 
-            // [UIService.MoveFocus] điều hướng bàn phím Enter/Down/Up
+            // hiện / ẩn mật khẩu
+            chkMatkhau.CheckedChanged += chkMatkhau_CheckedChanged;
+            chkNhaplaimk.CheckedChanged += chkNhaplaimk_CheckedChanged;
+
+            // [UIService.MoveFocus] điều hướng bàn phím Enter / Down / Up
             txtTendangnhap.KeyDown += (s, ke) => UIService.MoveFocus((Control)s, ke);
             txtMaxacnhan.KeyDown += (s, ke) => UIService.MoveFocus((Control)s, ke);
             txtMatkhau.KeyDown += (s, ke) => UIService.MoveFocus((Control)s, ke);
@@ -78,8 +84,11 @@ namespace Do_an_CongngheNET
 
             if (string.IsNullOrEmpty(tenDangNhap))
             {
-                MessageBox.Show("Tên đăng nhập hoặc email không tồn tại trong hệ thống!",
-                    "Không tìm thấy", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Tên đăng nhập hoặc email không tồn tại trong hệ thống!",
+                    "Không tìm thấy",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 txtTendangnhap.Focus();
                 return;
             }
@@ -93,7 +102,9 @@ namespace Do_an_CongngheNET
             MessageBox.Show(
                 $"Mã xác nhận đã được tạo!\nMã OTP của bạn là: {_otpHienTai}\n\n" +
                 "(Trong thực tế mã sẽ được gửi qua email/SMS)",
-                "Mã xác nhận", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                "Mã xác nhận",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         // ================================================================
@@ -101,9 +112,9 @@ namespace Do_an_CongngheNET
         // ================================================================
         private string TimTaiKhoan(string input)
         {
-            // _db.ExecuteQuery - giống thầy
+            // _db.ExecuteQuery – truy vấn bảng tblTAIKHOAN
             DataTable dt = _db.ExecuteQuery(
-                @"SELECT TenDangNhap FROM TaiKhoan
+                @"SELECT TenDangNhap FROM tblTAIKHOAN
                   WHERE TenDangNhap = @Input1 OR Email = @Input2",
                 new SqlParameter("@Input1", input),
                 new SqlParameter("@Input2", input));
@@ -115,7 +126,7 @@ namespace Do_an_CongngheNET
         }
 
         // ================================================================
-        // HIỆN/ẨN MẬT KHẨU MỚI
+        // HIỆN / ẨN MẬT KHẨU MỚI
         // ================================================================
         private void chkMatkhau_CheckedChanged(object sender, EventArgs e)
         {
@@ -123,7 +134,7 @@ namespace Do_an_CongngheNET
         }
 
         // ================================================================
-        // HIỆN/ẨN NHẬP LẠI MẬT KHẨU
+        // HIỆN / ẨN NHẬP LẠI MẬT KHẨU
         // ================================================================
         private void chkNhaplaimk_CheckedChanged(object sender, EventArgs e)
         {
@@ -135,28 +146,32 @@ namespace Do_an_CongngheNET
         // ================================================================
         private void lblXacnhanmk_Click(object sender, EventArgs e)
         {
-            // [UIService.Require] kiểm tra bắt buộc nhập
+            // [UIService.Require] kiểm tra từng bước
             if (!UIService.Require(txtTendangnhap,
                 "Vui lòng nhập tên đăng nhập hoặc email!")) return;
 
             // kiểm tra đã bấm "Gửi mã" chưa
-            if (string.IsNullOrEmpty(_otpHienTai) || string.IsNullOrEmpty(_tenDangNhapTimDuoc))
+            if (string.IsNullOrEmpty(_otpHienTai) ||
+                string.IsNullOrEmpty(_tenDangNhapTimDuoc))
             {
-                MessageBox.Show("Vui lòng bấm 'Gửi mã' để nhận mã xác nhận trước!",
-                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Vui lòng bấm 'Gửi mã' để nhận mã xác nhận trước!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            // [UIService.Require] kiểm tra bắt buộc nhập
             if (!UIService.Require(txtMaxacnhan, "Vui lòng nhập mã xác nhận!")) return;
             if (!UIService.Require(txtMatkhau, "Vui lòng nhập mật khẩu mới!")) return;
 
-            // [UIService.MaxLength] kiểm tra độ dài tối thiểu (dùng MaxLength để kiểm tra ngược)
+            // kiểm tra độ dài tối thiểu 6 ký tự
             if (txtMatkhau.Text.Trim().Length < 6)
             {
-                MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtMatkhau.Focus(); return;
+                MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự!",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMatkhau.Focus();
+                return;
             }
 
             // [UIService.MaxLength] kiểm tra độ dài tối đa
@@ -168,18 +183,20 @@ namespace Do_an_CongngheNET
             // kiểm tra 2 mật khẩu có khớp không
             if (txtMatkhau.Text.Trim() != txtNhaplaimk.Text.Trim())
             {
-                MessageBox.Show("Mật khẩu nhập lại không khớp!", "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Mật khẩu nhập lại không khớp!",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtNhaplaimk.Clear();
-                txtNhaplaimk.Focus(); return;
+                txtNhaplaimk.Focus();
+                return;
             }
 
             // kiểm tra OTP có khớp không
             if (txtMaxacnhan.Text.Trim() != _otpHienTai)
             {
-                MessageBox.Show("Mã xác nhận không đúng!", "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtMaxacnhan.Focus(); return;
+                MessageBox.Show("Mã xác nhận không đúng!",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtMaxacnhan.Focus();
+                return;
             }
 
             // cập nhật mật khẩu mới vào DB
@@ -191,21 +208,24 @@ namespace Do_an_CongngheNET
                 _otpHienTai = "";
                 _tenDangNhapTimDuoc = "";
 
-                MessageBox.Show("Đổi mật khẩu thành công!\nVui lòng đăng nhập lại.",
-                    "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    "Đổi mật khẩu thành công!\nVui lòng đăng nhập lại.",
+                    "Thành công",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
                 MoDangNhap();
             }
         }
 
         // ================================================================
-        // CẬP NHẬT MẬT KHẨU MỚI VÀO BẢNG TaiKhoan
+        // CẬP NHẬT MẬT KHẨU MỚI VÀO BẢNG tblTAIKHOAN
         // ================================================================
         private bool CapNhatMatKhau(string tenDangNhap, string matKhauMoi)
         {
-            // _db.ExecuteNonQuery - giống thầy
+            // _db.ExecuteNonQuery – cập nhật DB
             int rows = _db.ExecuteNonQuery(
-                @"UPDATE TaiKhoan SET MatKhau = @MatKhauMoi
+                @"UPDATE tblTAIKHOAN SET MatKhau = @MatKhauMoi
                   WHERE TenDangNhap = @TenDangNhap",
                 new SqlParameter("@MatKhauMoi", matKhauMoi),
                 new SqlParameter("@TenDangNhap", tenDangNhap));
@@ -214,7 +234,7 @@ namespace Do_an_CongngheNET
         }
 
         // ================================================================
-        // QUAY LẠI ĐĂNG NHẬP
+        // QUAY LẠI ĐĂNG NHẬP (click link)
         // ================================================================
         private void lblQuaylaidangnhap_Click(object sender, EventArgs e)
         {
@@ -222,13 +242,27 @@ namespace Do_an_CongngheNET
         }
 
         // ================================================================
-        // HÀM DÙNG CHUNG MỞ LẠI FORM ĐĂNG NHẬP
+        // HÀM DÙNG CHUNG – MỞ LẠI FORM ĐĂNG NHẬP
         // ================================================================
         private void MoDangNhap()
         {
-            Dangnhap frmDN = new Dangnhap();
-            frmDN.Show();
-            this.Close();
+            // Thử mở theo tên class phổ biến trong project
+            // Nếu class tên khác thì đổi "Dangnhap" → tên class thực tế
+            Form frmDN = null;
+
+            try { frmDN = new Dangnhap(); }
+            catch { /* class chưa tồn tại, bỏ qua */ }
+
+            if (frmDN != null)
+            {
+                frmDN.Show();
+                this.Close();
+            }
+            else
+            {
+                // Nếu form đăng nhập chưa có, chỉ đóng form này
+                this.Close();
+            }
         }
     }
 }

@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using QLKTX;
+using System;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Do_an_CongngheNET
 {
     public partial class frmMain : Form
     {
-        enum ChildFormMode
-        {
-            Fill,
-            Center
-        }
-
+        // ----------------------------------------------------------------
+        // CONSTRUCTOR
+        // ----------------------------------------------------------------
         public frmMain()
         {
             InitializeComponent();
@@ -29,14 +21,17 @@ namespace Do_an_CongngheNET
             GanSuKien();
         }
 
+        // ----------------------------------------------------------------
+        // LOAD
+        // ----------------------------------------------------------------
         private void frmMain_Load(object sender, EventArgs e)
         {
-            lblTime.Text = "Admin   Time: " + DateTime.Now.ToString("HH:mm:ss - dd/MM/yyyy");
+            CapNhatThoiGian();
         }
 
-        // =====================================================
-        // GÁN SỰ KIỆN CLICK CHO MENU VÀ TOOLSTRIP
-        // =====================================================
+        // ----------------------------------------------------------------
+        // GÁN SỰ KIỆN (tập trung, không trùng lặp với Designer)
+        // ----------------------------------------------------------------
         private void GanSuKien()
         {
             // HỆ THỐNG
@@ -56,24 +51,29 @@ namespace Do_an_CongngheNET
             mnuChuyenphong.Click += mnuChuyenphong_Click;
             mnuTraphong.Click += mnuTraphong_Click;
             mnuNhapdiennuoc.Click += mnuNhapdiennuoc_Click;
+            mnuHoadonthanhtoan.Click += mnuHoadonthanhtoan_Click;
 
             // BÁO CÁO
             mnuThongkebaocao.Click += mnuThongkebaocao_Click;
 
             // TOOLSTRIP
-            // tlsQuanlytaikhoan đã có sẵn sự kiện tspTrangchu_Click trong Designer nên không gán lại
             tlsQuanlysinhvien.Click += tlsQuanlysinhvien_Click;
             tlsQuanlyphong.Click += tlsQuanlyphong_Click;
             tlsDangkyoxepphong.Click += tlsDangkyoxepphong_Click;
             tlsLaphoadonthanhtoan.Click += tlsLaphoadonthanhtoan_Click;
             tlsThongkebaocao.Click += tlsThongkebaocao_Click;
 
+            // PANEL RESIZE → giữ form Center ở giữa
             pnlMain.Resize += pnlMain_Resize;
         }
 
-        // =====================================================
-        // HÀM MỞ FORM CON TRONG PANEL
-        // =====================================================
+        // ================================================================
+        // MỞ FORM CON TRONG PANEL CHÍNH
+        // ================================================================
+
+        /// <summary>
+        /// Nhúng form con vào pnlMain với chế độ Fill hoặc Center.
+        /// </summary>
         private void OpenChildForm(Form child, ChildFormMode mode)
         {
             pnlMain.Controls.Clear();
@@ -90,7 +90,7 @@ namespace Do_an_CongngheNET
             {
                 child.Dock = DockStyle.Fill;
             }
-            else
+            else // Center
             {
                 child.Dock = DockStyle.None;
                 child.Left = (pnlMain.Width - child.Width) / 2;
@@ -100,20 +100,20 @@ namespace Do_an_CongngheNET
             child.Show();
         }
 
-        // =====================================================
-        // HÀM TỰ TÌM FORM THEO TÊN CLASS RỒI MỞ
-        // Ưu điểm: không bị lỗi đỏ nếu tên form chưa đúng
-        // =====================================================
+        /// <summary>
+        /// Tìm kiếm form theo nhiều tên class khác nhau rồi mở.
+        /// Cho phép nhóm dự án dùng tên class khác nhau mà không bị lỗi biên dịch.
+        /// </summary>
         private void OpenFormByName(ChildFormMode mode, params string[] formNames)
         {
-            foreach (string formName in formNames)
+            foreach (string name in formNames)
             {
-                Type formType = Assembly.GetExecutingAssembly()
-                    .GetType("Do_an_CongngheNET." + formName);
+                Type t = Assembly.GetExecutingAssembly()
+                                 .GetType("Do_an_CongngheNET." + name);
 
-                if (formType != null && typeof(Form).IsAssignableFrom(formType))
+                if (t != null && typeof(Form).IsAssignableFrom(t))
                 {
-                    Form frm = (Form)Activator.CreateInstance(formType);
+                    Form frm = (Form)Activator.CreateInstance(t);
                     OpenChildForm(frm, mode);
                     return;
                 }
@@ -125,217 +125,140 @@ namespace Do_an_CongngheNET
                 "Tên class nằm ở dòng: public partial class TenForm : Form",
                 "Thông báo",
                 MessageBoxButtons.OK,
-                MessageBoxIcon.Warning
-            );
+                MessageBoxIcon.Warning);
         }
 
-        // =====================================================
+        // ================================================================
         // HỆ THỐNG
-        // =====================================================
+        // ================================================================
+
         private void mnuQuanlytaikhoan_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Center,
-                "Quanlytaikhoan",
-                "QuanLyTaiKhoan",
-                "frmQuanlytaikhoan",
-                "frmQuanLyTaiKhoan",
-                "frmUser",
-                "User"
-            );
+            OpenFormByName(ChildFormMode.Center,
+                "frmQuanlytaikhoan", "frmQuanLyTaiKhoan",
+                "Quanlytaikhoan", "QuanLyTaiKhoan",
+                "frmUser", "User");
         }
 
         private void mnuPhanquyen_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Center,
-                "Phanquyen",
-                "PhanQuyen",
-                "frmPhanquyen",
-                "frmPhanQuyen",
-                "frmRolePermission",
-                "RolePermission"
-            );
+            OpenFormByName(ChildFormMode.Center,
+                "frmPhanquyen", "frmPhanQuyen",
+                "Phanquyen", "PhanQuyen",
+                "frmRolePermission", "RolePermission");
         }
 
         private void mnuDangnhap_Click(object sender, EventArgs e)
-{
-    OpenFormByName(
-        ChildFormMode.Center,
-        "Dangnhap",
-        "DangNhap",
-        "frmDangnhap",
-        "frmDangNhap",
-        "frmLogin",
-        "Login"
-    );
-}
+        {
+            OpenFormByName(ChildFormMode.Center,
+                "frmDangnhap", "frmDangNhap",
+                "Dangnhap", "DangNhap",
+                "frmLogin", "Login");
+        }
 
         private void mnuQuenmatkhau_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Center,
-                "Quenmatkhau",
-                "QuenMatKhau",
-                "frmQuenmatkhau",
-                "frmQuenMatKhau",
-                "ForgotPassword",
-                "frmForgotPassword"
-            );
+            OpenFormByName(ChildFormMode.Center,
+                "frmQuenmatkhau", "frmQuenMatKhau",
+                "Quenmatkhau", "QuenMatKhau",
+                "frmForgotPassword", "ForgotPassword");
         }
 
         private void mnuKetthuc_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show(
+            DialogResult dr = MessageBox.Show(
                 "Bạn có chắc chắn muốn thoát chương trình không?",
                 "Xác nhận",
                 MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
+                MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
-            {
+            if (dr == DialogResult.Yes)
                 Application.Exit();
-            }
         }
 
-        // =====================================================
+        // ================================================================
         // QUẢN LÝ
-        // =====================================================
+        // ================================================================
+
         private void mnuQuanlysinhvien_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Quanlysinhvien",
-                "QuanLySinhVien",
-                "frmQuanlysinhvien",
-                "frmQuanLySinhVien",
-                "Sinhvien",
-                "SinhVien",
-                "frmSinhVien"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmQuanlysinhvien", "frmQuanLySinhVien",
+                "Quanlysinhvien", "QuanLySinhVien",
+                "frmSinhVien", "SinhVien");
         }
 
         private void mnuQuanlykhunha_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Quanlykhunha",
-                "QuanLyKhuNha",
-                "frmQuanlykhunha",
-                "frmQuanLyKhuNha"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmQuanlykhunha", "frmQuanLyKhuNha",
+                "Quanlykhunha", "QuanLyKhuNha");
         }
 
         private void mnuQuanlyphong_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Quanlyphong",
-                "QuanLyPhong",
-                "frmQuanlyphong",
-                "frmQuanLyPhong"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmQuanlyphong", "frmQuanLyPhong",
+                "Quanlyphong", "QuanLyPhong");
         }
 
-        // =====================================================
+        // ================================================================
         // NGHIỆP VỤ
-        // =====================================================
+        // ================================================================
+
         private void mnuDangkyoxepphong_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Dangkyoxepphong",
-                "DangKyOXepPhong",
-                "frmDangkyoxepphong",
-                "frmDangKyOXepPhong",
-                "Dangkyophong",
-                "DangKyOPhong",
-                "frmDangKyOPhong"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmDangkyoxepphong", "frmDangKyOXepPhong",
+                "Dangkyoxepphong", "DangKyOXepPhong",
+                "frmDangKyOPhong", "DangKyOPhong");
         }
 
         private void mnuChuyenphong_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Chuyenphong",
-                "ChuyenPhong",
-                "frmChuyenphong",
-                "frmChuyenPhong"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmChuyenphong", "frmChuyenPhong",
+                "Chuyenphong", "ChuyenPhong");
         }
 
         private void mnuTraphong_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Traphong",
-                "TraPhong",
-                "frmTraphong",
-                "frmTraPhong"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmTraphong", "frmTraPhong",
+                "Traphong", "TraPhong");
         }
 
         private void mnuNhapdiennuoc_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Nhapdiennuoc",
-                "NhapDienNuoc",
-                "frmNhapdiennuoc",
-                "frmNhapDienNuoc"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmNhapdiennuoc", "frmNhapDienNuoc",
+                "Nhapdiennuoc", "NhapDienNuoc");
         }
 
         private void mnuHoadonthanhtoan_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Hoadonthanhtoan",
-                "HoaDonThanhToan",
-                "frmHoadonthanhtoan",
-                "frmHoaDonThanhToan",
-                "Hoadon",
-                "HoaDon",
-                "frmHoaDon"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmHoadonthanhtoan", "frmHoaDonThanhToan",
+                "Hoadonthanhtoan", "HoaDonThanhToan",
+                "frmHoaDon", "HoaDon");
         }
 
-        // =====================================================
+        // ================================================================
         // BÁO CÁO
-        // =====================================================
+        // ================================================================
+
         private void mnuThongkebaocao_Click(object sender, EventArgs e)
         {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Thongkebaocao",
-                "ThongKeBaoCao",
-                "frmThongkebaocao",
-                "frmThongKeBaoCao",
-                "Baocao",
-                "BaoCao",
-                "frmBaoCao"
-            );
+            OpenFormByName(ChildFormMode.Fill,
+                "frmThongkebaocao", "frmThongKeBaoCao",
+                "Thongkebaocao", "ThongKeBaoCao",
+                "frmBaoCao", "BaoCao");
         }
 
-        private void mnuLaphoadonthanhtoan_Click(object sender, EventArgs e)
-        {
-            OpenFormByName(
-                ChildFormMode.Fill,
-                "Laphoadonthanhtoan",
-                "LapHoaDonThanhToan",
-                "frmLaphoadonthanhtoan",
-                "frmLapHoaDonThanhToan",
-                "Hoadonthanhtoan",
-                "HoaDonThanhToan",
-                "frmHoaDonThanhToan"
-            );
-        }
+        // ================================================================
+        // TOOLSTRIP → gọi lại menu tương ứng
+        // ================================================================
 
-        // =====================================================
-        // TOOLSTRIP GỌI LẠI MENU TƯƠNG ỨNG
-        // =====================================================
         private void tspTrangchu_Click(object sender, EventArgs e)
         {
             mnuQuanlytaikhoan.PerformClick();
@@ -366,24 +289,29 @@ namespace Do_an_CongngheNET
             mnuThongkebaocao.PerformClick();
         }
 
-        // =====================================================
-        // TIMER
-        // =====================================================
+        // ================================================================
+        // TIMER – cập nhật giờ mỗi giây
+        // ================================================================
+
         private void timer1_Tick(object sender, EventArgs e)
+        {
+            CapNhatThoiGian();
+        }
+
+        private void CapNhatThoiGian()
         {
             lblTime.Text = "Admin   Time: " + DateTime.Now.ToString("HH:mm:ss - dd/MM/yyyy");
         }
 
-        // =====================================================
-        // KHI PANEL RESIZE THÌ FORM CENTER VẪN Ở GIỮA
-        // =====================================================
+        // ================================================================
+        // PANEL RESIZE – giữ form Center ở giữa khi thay đổi kích thước
+        // ================================================================
+
         private void pnlMain_Resize(object sender, EventArgs e)
         {
-            if (pnlMain.Controls.Count == 0)
-                return;
+            if (pnlMain.Controls.Count == 0) return;
 
             Control child = pnlMain.Controls[0];
-
             if (child.Dock == DockStyle.None)
             {
                 child.Left = (pnlMain.Width - child.Width) / 2;
