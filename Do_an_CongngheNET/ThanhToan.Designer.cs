@@ -1,7 +1,6 @@
-﻿
-namespace Do_an_CongngheNET
+﻿namespace Do_an_CongngheNET
 {
-    partial class Form1
+    partial class ThanhToan
     {
         /// <summary>
         /// Required designer variable.
@@ -32,10 +31,9 @@ namespace Do_an_CongngheNET
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.Text = "ThanhToan";
         }
 
         #endregion
     }
 }
-

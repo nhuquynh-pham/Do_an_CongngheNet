@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Do_an_CongngheNET
 {
-    public partial class Form1 : Form
+    public partial class ThanhToan : Form
     {
-        public Form1()
+        public ThanhToan()
         {
             InitializeComponent();
         }
