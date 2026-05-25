@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Do_an_CongngheNET;
 
 namespace Do_an_CongngheNET
 {
@@ -16,7 +17,7 @@ namespace Do_an_CongngheNET
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Quanlytaikhoan());
         }
     }
 }

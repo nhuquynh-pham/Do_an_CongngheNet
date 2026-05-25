@@ -61,10 +61,11 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.tlpRight = new System.Windows.Forms.TableLayoutPanel();
             this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
-            this.lblTimkiem = new System.Windows.Forms.Label();
             this.txtSearch = new System.Windows.Forms.TextBox();
+            this.lblTimkiem = new System.Windows.Forms.Label();
             this.pnlGrid = new System.Windows.Forms.Panel();
             this.dgvCategory = new System.Windows.Forms.DataGridView();
+
             this.tlpRoot.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tlpContent.SuspendLayout();
@@ -76,9 +77,8 @@
             this.pnlGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCategory)).BeginInit();
             this.SuspendLayout();
-            // 
+
             // tlpRoot
-            // 
             this.tlpRoot.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.OutsetDouble;
             this.tlpRoot.ColumnCount = 1;
             this.tlpRoot.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -92,28 +92,27 @@
             this.tlpRoot.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRoot.Size = new System.Drawing.Size(965, 519);
             this.tlpRoot.TabIndex = 0;
-            // 
+
             // pnlHeader
-            // 
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlHeader.Location = new System.Drawing.Point(6, 6);
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(953, 48);
             this.pnlHeader.TabIndex = 0;
-            // 
+            this.pnlHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlHeader_Paint);
+
             // lblTitle
-            // 
             this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.lblTitle.Location = new System.Drawing.Point(347, 13);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(213, 25);
+            this.lblTitle.Size = new System.Drawing.Size(230, 25);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "QUẢN LÝ TÀI KHOẢN";
             this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
-            // 
+
             // tlpContent
-            // 
             this.tlpContent.ColumnCount = 2;
             this.tlpContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tlpContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
@@ -126,9 +125,8 @@
             this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpContent.Size = new System.Drawing.Size(953, 450);
             this.tlpContent.TabIndex = 1;
-            // 
+
             // tlpLeft
-            // 
             this.tlpLeft.ColumnCount = 1;
             this.tlpLeft.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpLeft.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -142,9 +140,8 @@
             this.tlpLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 21.52588F));
             this.tlpLeft.Size = new System.Drawing.Size(375, 444);
             this.tlpLeft.TabIndex = 0;
-            // 
+
             // tlplnputs
-            // 
             this.tlplnputs.ColumnCount = 2;
             this.tlplnputs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlplnputs.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -183,26 +180,23 @@
             this.tlplnputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tlplnputs.Size = new System.Drawing.Size(369, 342);
             this.tlplnputs.TabIndex = 0;
-            // 
+
             // lblTendangnhap
-            // 
             this.lblTendangnhap.AutoSize = true;
             this.lblTendangnhap.Location = new System.Drawing.Point(3, 0);
             this.lblTendangnhap.Name = "lblTendangnhap";
             this.lblTendangnhap.Size = new System.Drawing.Size(189, 25);
             this.lblTendangnhap.TabIndex = 0;
             this.lblTendangnhap.Text = "Tên Đăng Nhập  (*):";
-            // 
+
             // txtTendangnhap
-            // 
             this.txtTendangnhap.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtTendangnhap.Location = new System.Drawing.Point(198, 3);
             this.txtTendangnhap.Name = "txtTendangnhap";
             this.txtTendangnhap.Size = new System.Drawing.Size(168, 30);
             this.txtTendangnhap.TabIndex = 1;
-            // 
+
             // lblMatKhau
-            // 
             this.lblMatKhau.AutoSize = true;
             this.lblMatKhau.Location = new System.Drawing.Point(3, 38);
             this.lblMatKhau.Name = "lblMatKhau";
@@ -210,70 +204,63 @@
             this.lblMatKhau.TabIndex = 0;
             this.lblMatKhau.Text = "Mật Khẩu:";
             this.lblMatKhau.Click += new System.EventHandler(this.label2_Click);
-            // 
+
             // txtmatkhau
-            // 
             this.txtmatkhau.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtmatkhau.Location = new System.Drawing.Point(198, 41);
             this.txtmatkhau.Name = "txtmatkhau";
+            this.txtmatkhau.PasswordChar = '*';
             this.txtmatkhau.Size = new System.Drawing.Size(168, 30);
             this.txtmatkhau.TabIndex = 1;
-            // 
+
             // lblHoten
-            // 
             this.lblHoten.AutoSize = true;
             this.lblHoten.Location = new System.Drawing.Point(3, 76);
             this.lblHoten.Name = "lblHoten";
             this.lblHoten.Size = new System.Drawing.Size(83, 25);
             this.lblHoten.TabIndex = 2;
             this.lblHoten.Text = "Họ Tên:";
-            // 
+
             // txthoten
-            // 
             this.txthoten.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txthoten.Location = new System.Drawing.Point(198, 79);
             this.txthoten.Name = "txthoten";
             this.txthoten.Size = new System.Drawing.Size(168, 30);
             this.txthoten.TabIndex = 3;
-            // 
+
             // lblSodienthoai
-            // 
             this.lblSodienthoai.AutoSize = true;
             this.lblSodienthoai.Location = new System.Drawing.Point(3, 190);
             this.lblSodienthoai.Name = "lblSodienthoai";
             this.lblSodienthoai.Size = new System.Drawing.Size(143, 25);
             this.lblSodienthoai.TabIndex = 2;
             this.lblSodienthoai.Text = "Số Điện Thoại:";
-            // 
+
             // lblQuyenHan
-            // 
             this.lblQuyenHan.AutoSize = true;
             this.lblQuyenHan.Location = new System.Drawing.Point(3, 152);
             this.lblQuyenHan.Name = "lblQuyenHan";
             this.lblQuyenHan.Size = new System.Drawing.Size(118, 25);
             this.lblQuyenHan.TabIndex = 2;
             this.lblQuyenHan.Text = "Quyền Hạn:";
-            // 
+
             // lblChucVu
-            // 
             this.lblChucVu.AutoSize = true;
             this.lblChucVu.Location = new System.Drawing.Point(3, 114);
             this.lblChucVu.Name = "lblChucVu";
             this.lblChucVu.Size = new System.Drawing.Size(95, 25);
             this.lblChucVu.TabIndex = 2;
             this.lblChucVu.Text = "Chức Vụ:";
-            // 
+
             // lblmail
-            // 
             this.lblmail.AutoSize = true;
             this.lblmail.Location = new System.Drawing.Point(3, 228);
             this.lblmail.Name = "lblmail";
             this.lblmail.Size = new System.Drawing.Size(66, 25);
             this.lblmail.TabIndex = 2;
             this.lblmail.Text = "Email:";
-            // 
+
             // lblTrangthai
-            // 
             this.lblTrangthai.AutoSize = true;
             this.lblTrangthai.Location = new System.Drawing.Point(3, 266);
             this.lblTrangthai.Name = "lblTrangthai";
@@ -281,69 +268,61 @@
             this.lblTrangthai.TabIndex = 2;
             this.lblTrangthai.Text = "Trạng Thái:";
             this.lblTrangthai.Click += new System.EventHandler(this.label6_Click);
-            // 
+
             // lblghichu
-            // 
             this.lblghichu.AutoSize = true;
             this.lblghichu.Location = new System.Drawing.Point(3, 304);
             this.lblghichu.Name = "lblghichu";
             this.lblghichu.Size = new System.Drawing.Size(90, 25);
             this.lblghichu.TabIndex = 2;
             this.lblghichu.Text = "Ghi Chú:";
-            // 
+
             // txtsodienthoai
-            // 
             this.txtsodienthoai.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtsodienthoai.Location = new System.Drawing.Point(198, 193);
             this.txtsodienthoai.Name = "txtsodienthoai";
             this.txtsodienthoai.Size = new System.Drawing.Size(168, 30);
             this.txtsodienthoai.TabIndex = 3;
-            // 
+
             // txtmail
-            // 
             this.txtmail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtmail.Location = new System.Drawing.Point(198, 231);
             this.txtmail.Name = "txtmail";
             this.txtmail.Size = new System.Drawing.Size(168, 30);
             this.txtmail.TabIndex = 3;
-            // 
+
             // txtghichu
-            // 
             this.txtghichu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtghichu.Location = new System.Drawing.Point(198, 307);
             this.txtghichu.Name = "txtghichu";
             this.txtghichu.Size = new System.Drawing.Size(168, 30);
             this.txtghichu.TabIndex = 3;
-            // 
+
             // cbochucvu
-            // 
             this.cbochucvu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbochucvu.FormattingEnabled = true;
             this.cbochucvu.Location = new System.Drawing.Point(198, 117);
             this.cbochucvu.Name = "cbochucvu";
             this.cbochucvu.Size = new System.Drawing.Size(168, 33);
             this.cbochucvu.TabIndex = 4;
-            // 
+
             // cboquyenhan
-            // 
             this.cboquyenhan.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboquyenhan.FormattingEnabled = true;
             this.cboquyenhan.Location = new System.Drawing.Point(198, 155);
             this.cboquyenhan.Name = "cboquyenhan";
             this.cboquyenhan.Size = new System.Drawing.Size(168, 33);
             this.cboquyenhan.TabIndex = 4;
-            // 
+
             // cboTrangthai
-            // 
             this.cboTrangthai.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cboTrangthai.FormattingEnabled = true;
             this.cboTrangthai.Location = new System.Drawing.Point(198, 269);
             this.cboTrangthai.Name = "cboTrangthai";
             this.cboTrangthai.Size = new System.Drawing.Size(168, 33);
             this.cboTrangthai.TabIndex = 4;
-            // 
+
             // tlpButtons
-            // 
             this.tlpButtons.ColumnCount = 3;
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tlpButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
@@ -362,9 +341,8 @@
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButtons.Size = new System.Drawing.Size(369, 90);
             this.tlpButtons.TabIndex = 1;
-            // 
+
             // btnNew
-            // 
             this.btnNew.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnNew.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.btnNew.Location = new System.Drawing.Point(3, 3);
@@ -373,10 +351,8 @@
             this.btnNew.TabIndex = 0;
             this.btnNew.Text = "Thêm mới";
             this.btnNew.UseVisualStyleBackColor = true;
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-            // 
+
             // btnEdit
-            // 
             this.btnEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnEdit.Location = new System.Drawing.Point(126, 3);
             this.btnEdit.Name = "btnEdit";
@@ -384,9 +360,8 @@
             this.btnEdit.TabIndex = 0;
             this.btnEdit.Text = "Sửa";
             this.btnEdit.UseVisualStyleBackColor = true;
-            // 
+
             // btnClose
-            // 
             this.btnClose.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnClose.Location = new System.Drawing.Point(249, 48);
             this.btnClose.Name = "btnClose";
@@ -394,9 +369,8 @@
             this.btnClose.TabIndex = 0;
             this.btnClose.Text = "Kết thúc";
             this.btnClose.UseVisualStyleBackColor = true;
-            // 
+
             // btnDelete
-            // 
             this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelete.Location = new System.Drawing.Point(249, 3);
             this.btnDelete.Name = "btnDelete";
@@ -404,9 +378,8 @@
             this.btnDelete.TabIndex = 1;
             this.btnDelete.Text = "Xóa";
             this.btnDelete.UseVisualStyleBackColor = true;
-            // 
+
             // btnCancel
-            // 
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCancel.Location = new System.Drawing.Point(126, 48);
             this.btnCancel.Name = "btnCancel";
@@ -414,9 +387,8 @@
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Hủy ghi";
             this.btnCancel.UseVisualStyleBackColor = true;
-            // 
+
             // btnSave
-            // 
             this.btnSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSave.Location = new System.Drawing.Point(3, 48);
             this.btnSave.Name = "btnSave";
@@ -424,9 +396,8 @@
             this.btnSave.TabIndex = 1;
             this.btnSave.Text = "Ghi";
             this.btnSave.UseVisualStyleBackColor = true;
-            // 
+
             // tlpRight
-            // 
             this.tlpRight.ColumnCount = 1;
             this.tlpRight.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRight.Controls.Add(this.tlpSearch, 0, 0);
@@ -439,14 +410,13 @@
             this.tlpRight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpRight.Size = new System.Drawing.Size(566, 444);
             this.tlpRight.TabIndex = 1;
-            // 
+
             // tlpSearch
-            // 
             this.tlpSearch.ColumnCount = 2;
             this.tlpSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tlpSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSearch.Controls.Add(this.lblTimkiem, 0, 0);
             this.tlpSearch.Controls.Add(this.txtSearch, 1, 0);
+            this.tlpSearch.Controls.Add(this.lblTimkiem, 0, 0);
             this.tlpSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSearch.Location = new System.Drawing.Point(3, 3);
             this.tlpSearch.Name = "tlpSearch";
@@ -454,35 +424,32 @@
             this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSearch.Size = new System.Drawing.Size(560, 48);
             this.tlpSearch.TabIndex = 0;
-            // 
+            this.tlpSearch.Paint += new System.Windows.Forms.PaintEventHandler(this.tlpSearch_Paint);
+
+            // txtSearch
+            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearch.Location = new System.Drawing.Point(254, 3);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(303, 30);
+            this.txtSearch.TabIndex = 1;
+
             // lblTimkiem
-            // 
             this.lblTimkiem.AutoSize = true;
             this.lblTimkiem.Location = new System.Drawing.Point(3, 0);
             this.lblTimkiem.Name = "lblTimkiem";
             this.lblTimkiem.Size = new System.Drawing.Size(245, 25);
             this.lblTimkiem.TabIndex = 0;
             this.lblTimkiem.Text = "Tìm Kiếm Tên Đăng Nhập:";
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSearch.Location = new System.Drawing.Point(254, 3);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(303, 30);
-            this.txtSearch.TabIndex = 1;
-            // 
+
             // pnlGrid
-            // 
             this.pnlGrid.Controls.Add(this.dgvCategory);
             this.pnlGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlGrid.Location = new System.Drawing.Point(3, 57);
             this.pnlGrid.Name = "pnlGrid";
             this.pnlGrid.Size = new System.Drawing.Size(560, 384);
             this.pnlGrid.TabIndex = 1;
-            // 
+
             // dgvCategory
-            // 
             this.dgvCategory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCategory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCategory.Location = new System.Drawing.Point(0, 0);
@@ -491,18 +458,41 @@
             this.dgvCategory.RowTemplate.Height = 24;
             this.dgvCategory.Size = new System.Drawing.Size(560, 384);
             this.dgvCategory.TabIndex = 0;
-            // 
-            // Quanlytaikhoan
-            // 
+            this.dgvCategory.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCategory_CellContentClick);
+
+            // Quanlytaikhoan (Form)
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(965, 519);
             this.Controls.Add(this.tlpRoot);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Font = new System.Drawing.Font(
+                "Microsoft Sans Serif", 12F,
+                System.Drawing.FontStyle.Regular,
+                System.Drawing.GraphicsUnit.Point,
+                ((byte)(163)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Name = "Quanlytaikhoan";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quanlytaikhoan";
+            this.Text = "Quản Lý Tài Khoản";
+            this.WindowState = System.Windows.Forms.FormWindowState.Normal;
+
+            // ================ WIRE EVENTS =================
+            this.Load += new System.EventHandler(this.Quanlytaikhoan_Load);
+
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);   // FIX: thiếu trong bản gốc
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);  // FIX: thiếu trong bản gốc
+
+            this.dgvCategory.SelectionChanged +=
+                new System.EventHandler(this.dgvCategory_SelectionChanged);
+
+            this.txtSearch.KeyDown +=
+                new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
+
+            // Resume
             this.tlpRoot.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
@@ -517,7 +507,6 @@
             this.pnlGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCategory)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion
