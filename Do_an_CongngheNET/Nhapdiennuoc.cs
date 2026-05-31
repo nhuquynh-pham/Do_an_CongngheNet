@@ -1,7 +1,8 @@
-﻿using System;
+﻿using QLKTX;
+using System;
 using System.Data;
-using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace Do_an_CongngheNET
 {
@@ -10,279 +11,178 @@ namespace Do_an_CongngheNET
         private readonly DBService _db;
         private SaveMode _saveMode = SaveMode.Insert;
 
-        private const int GIA_DIEN = 3500;
-        private const int GIA_NUOC = 15000;
-
         public Nhapdiennuoc()
         {
             InitializeComponent();
             _db = new DBService();
-
-            this.Load += Nhapdiennuoc_Load;
-
-            btnNew.Click += btnNew_Click;
-            btnEdit.Click += btnEdit_Click;
-            btnDelete.Click += btnDelete_Click;
-            btnSave.Click += btnSave_Click;
-            btnCancel.Click += btnCancel_Click;
-            btnClose.Click += btnClose_Click;
-
-            cboKhuNha.SelectedIndexChanged += cboKhuNha_SelectedIndexChanged;
-            dgvNhapdiennuoc.SelectionChanged += dgvNhapdiennuoc_SelectionChanged;
-            txtSearch1.KeyDown += txtSearch1_KeyDown;
-
-            txtChisodiencu.TextChanged += txtChisodiencu_TextChanged;
-            txtChisodienmoi.TextChanged += txtChisodienmoi_TextChanged;
-            txtChisonuoccu.TextChanged += txtChisonuoccu_TextChanged;
-            txtChisonuocmoi.TextChanged += txtChisonuocmoi_TextChanged;
-
-            txtNam.KeyPress += txtSo_KeyPress;
-            txtChisodiencu.KeyPress += txtSo_KeyPress;
-            txtChisodienmoi.KeyPress += txtSo_KeyPress;
-            txtChisonuoccu.KeyPress += txtSo_KeyPress;
-            txtChisonuocmoi.KeyPress += txtSo_KeyPress;
-
-            foreach (Control ctrl in this.Controls)
-                RegisterKeyDown(ctrl);
         }
 
-        private void RegisterKeyDown(Control parent)
-        {
-            foreach (Control ctrl in parent.Controls)
-            {
-                if (ctrl is TextBox tb)
-                    tb.KeyDown += txt_KeyDown;
-                RegisterKeyDown(ctrl);
-            }
-        }
-
+        // ================================================================
+        // SỰ KIỆN LOAD FORM
+        // ================================================================
         private void Nhapdiennuoc_Load(object sender, EventArgs e)
         {
-            txtSearch1.Tag = "AlwaysEnable";
+            // Kiểm tra quyền — không có quyền: giữ form trống,
+            // đợi render xong rồi mới hiện thông báo
+            if (!SessionManager.CoQuyen("CN006") && !SessionManager.CoQuyen("CN007"))
+            {
+                this.BeginInvoke(new Action(() =>
+                {
+                    MessageBox.Show("Bạn không có quyền truy cập chức năng này!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    this.Close();
+                }));
+                return; // dừng lại, không load dữ liệu gì cả
+            }
 
+            // Có quyền → load bình thường
             btnNew.Tag = "select";
             btnEdit.Tag = "select";
             btnDelete.Tag = "select";
-            btnClose.Tag = "select";
             btnSave.Tag = "confirm";
             btnCancel.Tag = "confirm";
 
-            UIService.SetButtonsEnabled(this, false);
             UIService.SetInputsEnabled(this, false);
-            UIService.SetInputsReadOnly(this, true);
+            UIService.SetButtonsEnabled(this, false);
+            txtSearch1.Enabled = true;
 
             UIService.SetGridStyle(dgvNhapdiennuoc);
 
-            txtDientieuthu.ReadOnly = true;
-            txtNuoctieuthu.ReadOnly = true;
-            txtTiendien.ReadOnly = true;
-            txtTiennuoc.ReadOnly = true;
-            txtTongtien.ReadOnly = true;
-
-            LoadKhuNha();
-            LoadThang();
+            LoadComboKhuNha();
+            LoadComboThang();
             LoadData();
 
             UIService.SetGridHeader(dgvNhapdiennuoc,
-                "Mã phiếu", "Khu nhà", "Phòng", "Tháng", "Năm",
-                "CS điện cũ", "CS điện mới", "Điện tiêu thụ",
-                "CS nước cũ", "CS nước mới", "Nước tiêu thụ",
-                "Tiền điện", "Tiền nước", "Tổng tiền");
-
-            // Ẩn 2 cột phụ MaKhu, MaPhong (không hiển thị nhưng dùng để bind)
-            if (dgvNhapdiennuoc.Columns.Contains("MaKhu"))
-                dgvNhapdiennuoc.Columns["MaKhu"].Visible = false;
-            if (dgvNhapdiennuoc.Columns.Contains("MaPhong"))
-                dgvNhapdiennuoc.Columns["MaPhong"].Visible = false;
+                "Mã phiếu", "Mã phòng", "Số phòng", "Khu nhà",
+                "Tháng", "Năm",
+                "CS Điện cũ", "CS Điện mới", "Điện TT",
+                "CS Nước cũ", "CS Nước mới", "Nước TT",
+                "Tiền điện", "Tiền nước", "Tổng tiền", "Ghi chú");
         }
 
-        private void LoadKhuNha()
-        {
-            string sql = "SELECT MaKhu, TenKhu FROM KhuNha ORDER BY TenKhu";
-            DataTable dt = _db.ExecuteQuery(sql);
-            cboKhuNha.DataSource = dt;
-            cboKhuNha.DisplayMember = "TenKhu";
-            cboKhuNha.ValueMember = "MaKhu";
-            cboKhuNha.SelectedIndex = -1;
-        }
-
-        private void LoadPhong(string maKhu)
-        {
-            string sql = @"SELECT MaPhong, SoPhong FROM Phong
-                           WHERE MaKhu = @MaKhu ORDER BY SoPhong";
-            DataTable dt = _db.ExecuteQuery(sql,
-                new SqlParameter("@MaKhu", maKhu));
-            cboPhong.DataSource = dt;
-            cboPhong.DisplayMember = "SoPhong";
-            cboPhong.ValueMember = "MaPhong";
-            cboPhong.SelectedIndex = -1;
-        }
-
-        private void LoadThang()
-        {
-            cboThang.Items.Clear();
-            for (int i = 1; i <= 12; i++)
-                cboThang.Items.Add(i);
-            cboThang.SelectedIndex = -1;
-        }
-
+        // ================================================================
+        // NÚT THÊM MỚI
+        // ================================================================
         private void btnNew_Click(object sender, EventArgs e)
         {
             _saveMode = SaveMode.Insert;
 
             UIService.ClearInputs(this);
-            UIService.SetButtonsEnabled(this, true);
             UIService.SetInputsEnabled(this, true);
-            UIService.SetInputsReadOnly(this, false);
-
-            txtDientieuthu.ReadOnly = true;
-            txtNuoctieuthu.ReadOnly = true;
-            txtTiendien.ReadOnly = true;
-            txtTiennuoc.ReadOnly = true;
-            txtTongtien.ReadOnly = true;
-
-            txtMaphieu.ReadOnly = false;
-
-            cboThang.SelectedItem = DateTime.Now.Month;
-            txtNam.Text = DateTime.Now.Year.ToString();
-
-            txtMaphieu.Focus();
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            if (dgvNhapdiennuoc.CurrentRow == null)
-            {
-                MessageBox.Show("Vui lòng chọn một dòng để sửa!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            _saveMode = SaveMode.Update;
-
             UIService.SetButtonsEnabled(this, true);
-            UIService.SetInputsEnabled(this, true);
-            UIService.SetInputsReadOnly(this, false);
 
-            txtDientieuthu.ReadOnly = true;
-            txtNuoctieuthu.ReadOnly = true;
-            txtTiendien.ReadOnly = true;
-            txtTiennuoc.ReadOnly = true;
-            txtTongtien.ReadOnly = true;
-
+            txtMaphieu.Text = GenerateNewID();
             txtMaphieu.ReadOnly = true;
 
-            txtChisodiencu.Focus();
+            txtDientieuthu.ReadOnly = true;
+            txtNuoctieuthu.ReadOnly = true;
+            txtTongtien.ReadOnly = true;
+
+            txtNam.Text = DateTime.Today.Year.ToString();
+            txtSearch1.Enabled = true;
+            cboKhuNha.Focus();
         }
 
+        // ================================================================
+        // NÚT SỬA
+        // ================================================================
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (dgvNhapdiennuoc.CurrentRow == null) return;
+
+            _saveMode = SaveMode.Update;
+            UIService.SetInputsEnabled(this, true);
+            UIService.SetButtonsEnabled(this, true);
+
+            txtMaphieu.ReadOnly = true;
+            txtDientieuthu.ReadOnly = true;
+            txtNuoctieuthu.ReadOnly = true;
+            txtTongtien.ReadOnly = true;
+
+            txtSearch1.Enabled = true;
+            cboKhuNha.Focus();
+        }
+
+        // ================================================================
+        // NÚT XÓA
+        // ================================================================
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (dgvNhapdiennuoc.CurrentRow == null)
-            {
-                MessageBox.Show("Vui lòng chọn một dòng để xóa!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
+            if (dgvNhapdiennuoc.CurrentRow == null) return;
             if (!UIService.ConfirmDelete()) return;
 
-            try
-            {
-                DeleteData(GetCurrentMaPhieu());
-                LoadData();
-                MessageBox.Show("Xóa phiếu thành công!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi xóa: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            string maPhieu = GetCurrentID();
+            DeleteData(maPhieu);
+            LoadData();
         }
 
+        // ================================================================
+        // NÚT GHI (LƯU)
+        // ================================================================
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
 
-            try
+            string maPhieu = txtMaphieu.Text.Trim();
+            string maPhong = cboPhong.SelectedValue?.ToString() ?? "";
+            int thang = Convert.ToInt32(cboThang.SelectedItem);
+            int nam = Convert.ToInt32(txtNam.Text.Trim());
+            int csDienCu = Convert.ToInt32(txtChisodiencu.Text.Trim());
+            int csDienMoi = Convert.ToInt32(txtChisodienmoi.Text.Trim());
+            int csNuocCu = Convert.ToInt32(txtChisonuoccu.Text.Trim());
+            int csNuocMoi = Convert.ToInt32(txtChisonuocmoi.Text.Trim());
+            long tienDien = Convert.ToInt64(txtTiendien.Text.Trim());
+            long tienNuoc = Convert.ToInt64(txtTiennuoc.Text.Trim());
+
+            if (_saveMode == SaveMode.Insert)
             {
-                string maPhieu = txtMaphieu.Text.Trim();
-                string maPhong = cboPhong.SelectedValue?.ToString();
-                int thang = Convert.ToInt32(cboThang.SelectedItem);
-                int nam = Convert.ToInt32(txtNam.Text.Trim());
-                int csDienCu = Convert.ToInt32(txtChisodiencu.Text.Trim());
-                int csDienMoi = Convert.ToInt32(txtChisodienmoi.Text.Trim());
-                int csNuocCu = Convert.ToInt32(txtChisonuoccu.Text.Trim());
-                int csNuocMoi = Convert.ToInt32(txtChisonuocmoi.Text.Trim());
-                int tienDien = Convert.ToInt32(txtTiendien.Text.Trim());
-                int tienNuoc = Convert.ToInt32(txtTiennuoc.Text.Trim());
-
-                int dienTieuThu = csDienMoi - csDienCu;
-                int nuocTieuThu = csNuocMoi - csNuocCu;
-                int tongTien = tienDien + tienNuoc;
-
-                if (_saveMode == SaveMode.Insert)
+                if (IDExists(maPhieu))
                 {
-                    if (MaPhieuExists(maPhieu))
-                    {
-                        MessageBox.Show("Mã phiếu đã tồn tại!", "Thông báo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        txtMaphieu.Focus();
-                        return;
-                    }
-                    InsertData(maPhieu, maPhong, thang, nam,
-                               csDienCu, csDienMoi, dienTieuThu,
-                               csNuocCu, csNuocMoi, nuocTieuThu,
-                               tienDien, tienNuoc, tongTien);
-                    MessageBox.Show("Thêm phiếu thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Mã phiếu đã tồn tại trong hệ thống!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtMaphieu.Focus();
+                    return;
                 }
-                else
-                {
-                    UpdateData(maPhieu, maPhong, thang, nam,
-                               csDienCu, csDienMoi, dienTieuThu,
-                               csNuocCu, csNuocMoi, nuocTieuThu,
-                               tienDien, tienNuoc, tongTien);
-                    MessageBox.Show("Cập nhật phiếu thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-
-                LoadData();
-                UIService.SetButtonsEnabled(this, false);
-                UIService.SetInputsEnabled(this, false);
-                UIService.SetInputsReadOnly(this, true);
+                InsertData(maPhieu, maPhong, thang, nam,
+                           csDienCu, csDienMoi, csNuocCu, csNuocMoi,
+                           tienDien, tienNuoc);
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Lỗi khi lưu: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (dgvNhapdiennuoc.CurrentRow == null) return;
+                UpdateData(maPhieu, maPhong, thang, nam,
+                           csDienCu, csDienMoi, csNuocCu, csNuocMoi,
+                           tienDien, tienNuoc);
             }
+
+            LoadData();
+            UIService.SetInputsEnabled(this, false);
+            UIService.SetButtonsEnabled(this, false);
+            txtSearch1.Enabled = true;
         }
 
+        // ================================================================
+        // NÚT HỦY GHI
+        // ================================================================
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            UIService.SetButtonsEnabled(this, false);
             UIService.SetInputsEnabled(this, false);
-            UIService.SetInputsReadOnly(this, true);
+            UIService.SetButtonsEnabled(this, false);
+            txtSearch1.Enabled = true;
             BindData();
         }
 
+        // ================================================================
+        // NÚT KẾT THÚC
+        // ================================================================
         private void btnClose_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void cboKhuNha_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cboKhuNha.SelectedValue == null) return;
-            LoadPhong(cboKhuNha.SelectedValue.ToString());
-        }
-
-        private void dgvNhapdiennuoc_SelectionChanged(object sender, EventArgs e)
-        {
-            BindData();
-        }
-
+        // ================================================================
+        // TÌM KIẾM KHI NHẤN ENTER
+        // ================================================================
         private void txtSearch1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -293,151 +193,203 @@ namespace Do_an_CongngheNET
             }
         }
 
-        private void txt_KeyDown(object sender, KeyEventArgs e)
+        // ================================================================
+        // KHI CHỌN DÒNG TRÊN LƯỚI → HIỂN THỊ DỮ LIỆU LÊN FORM
+        // ================================================================
+        private void dgvNhapdiennuoc_SelectionChanged(object sender, EventArgs e)
         {
-            UIService.MoveFocus((Control)sender, e);
+            BindData();
         }
 
-        private void txtSo_KeyPress(object sender, KeyPressEventArgs e)
+        // ================================================================
+        // KHI CHỌN KHU NHÀ → TẢI DANH SÁCH PHÒNG TƯƠNG ỨNG
+        // ================================================================
+        private void cboKhuNha_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-                e.Handled = true;
+            if (cboKhuNha.SelectedValue == null) return;
+            LoadComboPhong(cboKhuNha.SelectedValue.ToString());
         }
 
-        private void txtChisodiencu_TextChanged(object sender, EventArgs e) => TinhDienTieuthu();
-        private void txtChisodienmoi_TextChanged(object sender, EventArgs e) => TinhDienTieuthu();
-        private void txtChisonuoccu_TextChanged(object sender, EventArgs e) => TinhNuocTieuthu();
-        private void txtChisonuocmoi_TextChanged(object sender, EventArgs e) => TinhNuocTieuthu();
+        // ================================================================
+        // TỰ TÍNH KHI NHẬP CHỈ SỐ / TIỀN
+        // ================================================================
+        private void txtChisodienmoi_TextChanged(object sender, EventArgs e) => RecalcDien();
+        private void txtChisodiencu_TextChanged(object sender, EventArgs e) => RecalcDien();
+        private void txtChisonuocmoi_TextChanged(object sender, EventArgs e) => RecalcNuoc();
+        private void txtChisonuoccu_TextChanged(object sender, EventArgs e) => RecalcNuoc();
+        private void txtTiendien_TextChanged(object sender, EventArgs e) => RecalcTong();
+        private void txtTiennuoc_TextChanged(object sender, EventArgs e) => RecalcTong();
 
-        private void TinhDienTieuthu()
+        // ================================================================
+        // ĐIỀU HƯỚNG BÀN PHÍM
+        // ================================================================
+        private void txtNam_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void txtChisodiencu_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void txtChisodienmoi_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void txtChisonuoccu_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void txtChisonuocmoi_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void txtTiendien_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void txtTiennuoc_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void cboKhuNha_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void cboPhong_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+        private void cboThang_KeyDown(object sender, KeyEventArgs e) => UIService.MoveFocus((Control)sender, e);
+
+        // ================================================================
+        // TÍNH TOÁN TỰ ĐỘNG
+        // ================================================================
+        private void RecalcDien()
         {
-            int cu, moi;
-            if (int.TryParse(txtChisodiencu.Text, out cu) &&
-                int.TryParse(txtChisodienmoi.Text, out moi))
-            {
-                int tieuThu = moi - cu;
-                txtDientieuthu.Text = tieuThu.ToString();
-                txtTiendien.Text = (tieuThu * GIA_DIEN).ToString();
-            }
-            else
-            {
-                txtDientieuthu.Text = "";
-                txtTiendien.Text = "";
-            }
-            TinhTongTien();
+            int cu = 0, moi = 0;
+            int.TryParse(txtChisodiencu.Text.Trim(), out cu);
+            int.TryParse(txtChisodienmoi.Text.Trim(), out moi);
+            txtDientieuthu.Text = (moi - cu >= 0) ? (moi - cu).ToString() : "0";
+            RecalcTong();
         }
 
-        private void TinhNuocTieuthu()
+        private void RecalcNuoc()
         {
-            int cu, moi;
-            if (int.TryParse(txtChisonuoccu.Text, out cu) &&
-                int.TryParse(txtChisonuocmoi.Text, out moi))
-            {
-                int tieuThu = moi - cu;
-                txtNuoctieuthu.Text = tieuThu.ToString();
-                txtTiennuoc.Text = (tieuThu * GIA_NUOC).ToString();
-            }
-            else
-            {
-                txtNuoctieuthu.Text = "";
-                txtTiennuoc.Text = "";
-            }
-            TinhTongTien();
+            int cu = 0, moi = 0;
+            int.TryParse(txtChisonuoccu.Text.Trim(), out cu);
+            int.TryParse(txtChisonuocmoi.Text.Trim(), out moi);
+            txtNuoctieuthu.Text = (moi - cu >= 0) ? (moi - cu).ToString() : "0";
+            RecalcTong();
         }
 
-        private void TinhTongTien()
+        private void RecalcTong()
         {
-            int d = 0, n = 0;
-            int.TryParse(txtTiendien.Text, out d);
-            int.TryParse(txtTiennuoc.Text, out n);
-            txtTongtien.Text = (d + n).ToString();
+            long dien = 0, nuoc = 0;
+            long.TryParse(txtTiendien.Text.Trim(), out dien);
+            long.TryParse(txtTiennuoc.Text.Trim(), out nuoc);
+            txtTongtien.Text = (dien + nuoc).ToString();
         }
 
+        // ================================================================
+        // KIỂM TRA DỮ LIỆU ĐẦU VÀO
+        // ================================================================
         private bool ValidateInput()
         {
-            if (!UIService.Require(txtMaphieu, "Yêu cầu phải nhập mã phiếu!"))
-                return false;
-            if (!UIService.Require(cboKhuNha, "Yêu cầu phải chọn khu nhà!"))
-                return false;
-            if (!UIService.Require(cboPhong, "Yêu cầu phải chọn phòng!"))
-                return false;
-            if (!UIService.Require(cboThang, "Yêu cầu phải chọn tháng!"))
-                return false;
+            if (!UIService.Require(txtMaphieu, "Yêu cầu phải có mã phiếu!")) return false;
+            if (!UIService.Require(cboPhong, "Yêu cầu phải chọn phòng!")) return false;
+            if (!UIService.Require(cboThang, "Yêu cầu phải chọn tháng!")) return false;
+            if (!UIService.Require(txtNam, "Yêu cầu phải nhập năm!")) return false;
+            if (!UIService.IsNumber(txtNam, "Năm phải là số nguyên hợp lệ!")) return false;
 
-            int nam;
-            if (!int.TryParse(txtNam.Text.Trim(), out nam) || nam < 2000)
-            {
-                MessageBox.Show("Năm không hợp lệ (phải >= 2000)!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtNam.Focus();
-                return false;
-            }
+            if (!UIService.Require(txtChisodiencu, "Yêu cầu phải nhập chỉ số điện cũ!")) return false;
+            if (!UIService.Require(txtChisodienmoi, "Yêu cầu phải nhập chỉ số điện mới!")) return false;
+            if (!UIService.IsNumber(txtChisodiencu, "Chỉ số điện cũ phải là số!")) return false;
+            if (!UIService.IsNumber(txtChisodienmoi, "Chỉ số điện mới phải là số!")) return false;
 
-            int csDienCu;
-            if (!int.TryParse(txtChisodiencu.Text.Trim(), out csDienCu))
+            if (Convert.ToInt32(txtChisodienmoi.Text.Trim()) < Convert.ToInt32(txtChisodiencu.Text.Trim()))
             {
-                MessageBox.Show("Chỉ số điện cũ không hợp lệ!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtChisodiencu.Focus();
-                return false;
-            }
-
-            int csDienMoi;
-            if (!int.TryParse(txtChisodienmoi.Text.Trim(), out csDienMoi) || csDienMoi < csDienCu)
-            {
-                MessageBox.Show("Chỉ số điện mới phải lớn hơn hoặc bằng chỉ số cũ!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Chỉ số điện mới không được nhỏ hơn chỉ số điện cũ!",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtChisodienmoi.Focus();
                 return false;
             }
 
-            int csNuocCu;
-            if (!int.TryParse(txtChisonuoccu.Text.Trim(), out csNuocCu))
+            if (!UIService.Require(txtChisonuoccu, "Yêu cầu phải nhập chỉ số nước cũ!")) return false;
+            if (!UIService.Require(txtChisonuocmoi, "Yêu cầu phải nhập chỉ số nước mới!")) return false;
+            if (!UIService.IsNumber(txtChisonuoccu, "Chỉ số nước cũ phải là số!")) return false;
+            if (!UIService.IsNumber(txtChisonuocmoi, "Chỉ số nước mới phải là số!")) return false;
+
+            if (Convert.ToInt32(txtChisonuocmoi.Text.Trim()) < Convert.ToInt32(txtChisonuoccu.Text.Trim()))
             {
-                MessageBox.Show("Chỉ số nước cũ không hợp lệ!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtChisonuoccu.Focus();
+                MessageBox.Show("Chỉ số nước mới không được nhỏ hơn chỉ số nước cũ!",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtChisonuocmoi.Focus();
                 return false;
             }
 
-            int csNuocMoi;
-            if (!int.TryParse(txtChisonuocmoi.Text.Trim(), out csNuocMoi) || csNuocMoi < csNuocCu)
+            if (!UIService.Require(txtTiendien, "Yêu cầu phải nhập tiền điện!")) return false;
+            if (!UIService.Require(txtTiennuoc, "Yêu cầu phải nhập tiền nước!")) return false;
+            if (!UIService.IsNumber(txtTiendien, "Tiền điện phải là số!")) return false;
+            if (!UIService.IsNumber(txtTiennuoc, "Tiền nước phải là số!")) return false;
+
+            if (_saveMode == SaveMode.Insert)
             {
-                MessageBox.Show("Chỉ số nước mới phải lớn hơn hoặc bằng chỉ số cũ!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtChisonuocmoi.Focus();
-                return false;
+                string maPhong = cboPhong.SelectedValue?.ToString() ?? "";
+                int thang = Convert.ToInt32(cboThang.SelectedItem);
+                int nam = Convert.ToInt32(txtNam.Text.Trim());
+
+                if (RecordExists(maPhong, thang, nam))
+                {
+                    MessageBox.Show($"Phòng này đã có phiếu điện nước tháng {thang}/{nam}!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboPhong.Focus();
+                    return false;
+                }
             }
 
             return true;
         }
 
-        // ===== FIX 2: LoadData - thêm CurrentCell để grid thực sự chọn dòng đầu =====
-        private void LoadData()
+        // ================================================================
+        // KIỂM TRA MÃ PHIẾU ĐÃ TỒN TẠI
+        // ================================================================
+        private bool IDExists(string maPhieu)
         {
-            try
-            {
-                string keyword = txtSearch1.Text.Trim();
-
-                dgvNhapdiennuoc.SelectionChanged -= dgvNhapdiennuoc_SelectionChanged;
-                dgvNhapdiennuoc.DataSource = SearchData(keyword);
-                dgvNhapdiennuoc.SelectionChanged += dgvNhapdiennuoc_SelectionChanged;
-
-                if (dgvNhapdiennuoc.Rows.Count > 0)
-                {
-                    dgvNhapdiennuoc.Rows[0].Selected = true;
-                    dgvNhapdiennuoc.CurrentCell = dgvNhapdiennuoc.Rows[0].Cells[0];
-                }
-
-                BindData();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi LoadData: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            string sql = "SELECT COUNT(*) FROM DienNuoc WHERE MaPhieu = @MaPhieu";
+            return Convert.ToInt32(_db.ExecuteScalar(sql,
+                new SqlParameter("@MaPhieu", maPhieu))) > 0;
         }
 
+        // ================================================================
+        // KIỂM TRA PHÒNG ĐÃ CÓ PHIẾU TRONG THÁNG/NĂM ĐÓ
+        // ================================================================
+        private bool RecordExists(string maPhong, int thang, int nam)
+        {
+            string sql = @"SELECT COUNT(*) FROM DienNuoc
+                           WHERE MaPhong = @MaPhong AND Thang = @Thang AND Nam = @Nam";
+            return Convert.ToInt32(_db.ExecuteScalar(sql,
+                new SqlParameter("@MaPhong", maPhong),
+                new SqlParameter("@Thang", thang),
+                new SqlParameter("@Nam", nam))) > 0;
+        }
+
+        // ================================================================
+        // SINH MÃ PHIẾU TỰ ĐỘNG (DN001, DN002, ...)
+        // ================================================================
+        private string GenerateNewID()
+        {
+            string sql = @"SELECT ISNULL(MAX(CAST(SUBSTRING(MaPhieu, 3, LEN(MaPhieu)) AS INT)), 0) + 1
+                           FROM DienNuoc WHERE MaPhieu LIKE 'DN%'";
+            return "DN" + Convert.ToInt32(_db.ExecuteScalar(sql)).ToString("D3");
+        }
+
+        // ================================================================
+        // TẢI DỮ LIỆU
+        // ================================================================
+        private void LoadData()
+        {
+            dgvNhapdiennuoc.DataSource = SearchData(txtSearch1.Text.Trim());
+        }
+
+        private DataTable SearchData(string keyword = "")
+        {
+            string sql = @"SELECT dn.MaPhieu, dn.MaPhong, p.SoPhong, k.TenKhu,
+                                  dn.Thang, dn.Nam,
+                                  dn.ChiSoDienCu, dn.ChiSoDienMoi, dn.DienTieuThu,
+                                  dn.ChiSoNuocCu, dn.ChiSoNuocMoi, dn.NuocTieuThu,
+                                  dn.TienDien, dn.TienNuoc, dn.TongTien, dn.GhiChu
+                           FROM DienNuoc dn
+                           LEFT JOIN Phong  p ON dn.MaPhong = p.MaPhong
+                           LEFT JOIN KhuNha k ON p.MaKhu    = k.MaKhu
+                           WHERE (@Keyword = N''
+                                  OR dn.MaPhieu LIKE @Keyword
+                                  OR dn.MaPhong LIKE @Keyword
+                                  OR p.SoPhong  LIKE @Keyword
+                                  OR k.TenKhu   LIKE @Keyword
+                                  OR CAST(dn.Thang AS NVARCHAR) LIKE @Keyword
+                                  OR CAST(dn.Nam   AS NVARCHAR) LIKE @Keyword)
+                           ORDER BY dn.MaPhieu";
+
+            return _db.ExecuteQuery(sql,
+                new SqlParameter("@Keyword", "%" + keyword + "%"));
+        }
+
+        // ================================================================
+        // GÁN DỮ LIỆU TỪ LƯỚI LÊN FORM
+        // ================================================================
         private void BindData()
         {
             if (dgvNhapdiennuoc.CurrentRow == null)
@@ -446,115 +398,64 @@ namespace Do_an_CongngheNET
                 return;
             }
 
-            var row = dgvNhapdiennuoc.CurrentRow;
+            DataGridViewRow row = dgvNhapdiennuoc.CurrentRow;
 
-            txtChisodiencu.TextChanged -= txtChisodiencu_TextChanged;
-            txtChisodienmoi.TextChanged -= txtChisodienmoi_TextChanged;
-            txtChisonuoccu.TextChanged -= txtChisonuoccu_TextChanged;
-            txtChisonuocmoi.TextChanged -= txtChisonuocmoi_TextChanged;
+            txtMaphieu.Text = row.Cells["MaPhieu"].Value?.ToString() ?? "";
+            txtNam.Text = row.Cells["Nam"].Value?.ToString() ?? "";
+            txtChisodiencu.Text = row.Cells["ChiSoDienCu"].Value?.ToString() ?? "";
+            txtChisodienmoi.Text = row.Cells["ChiSoDienMoi"].Value?.ToString() ?? "";
+            txtDientieuthu.Text = row.Cells["DienTieuThu"].Value?.ToString() ?? "";
+            txtChisonuoccu.Text = row.Cells["ChiSoNuocCu"].Value?.ToString() ?? "";
+            txtChisonuocmoi.Text = row.Cells["ChiSoNuocMoi"].Value?.ToString() ?? "";
+            txtNuoctieuthu.Text = row.Cells["NuocTieuThu"].Value?.ToString() ?? "";
+            txtTiendien.Text = row.Cells["TienDien"].Value?.ToString() ?? "";
+            txtTiennuoc.Text = row.Cells["TienNuoc"].Value?.ToString() ?? "";
+            txtTongtien.Text = row.Cells["TongTien"].Value?.ToString() ?? "";
 
-            txtMaphieu.Text = GetCellValue(row, "MaPhieu");
-            txtNam.Text = GetCellValue(row, "Nam");
-            txtChisodiencu.Text = GetCellValue(row, "ChiSoDienCu");
-            txtChisodienmoi.Text = GetCellValue(row, "ChiSoDienMoi");
-            txtDientieuthu.Text = GetCellValue(row, "DienTieuThu");
-            txtChisonuoccu.Text = GetCellValue(row, "ChiSoNuocCu");
-            txtChisonuocmoi.Text = GetCellValue(row, "ChiSoNuocMoi");
-            txtNuoctieuthu.Text = GetCellValue(row, "NuocTieuThu");
-            txtTiendien.Text = GetCellValue(row, "TienDien");
-            txtTiennuoc.Text = GetCellValue(row, "TienNuoc");
-            txtTongtien.Text = GetCellValue(row, "TongTien");
+            object thangVal = row.Cells["Thang"].Value;
+            if (thangVal != null && thangVal != DBNull.Value)
+                cboThang.SelectedItem = Convert.ToInt32(thangVal);
+            else
+                cboThang.SelectedIndex = -1;
 
-            txtChisodiencu.TextChanged += txtChisodiencu_TextChanged;
-            txtChisodienmoi.TextChanged += txtChisodienmoi_TextChanged;
-            txtChisonuoccu.TextChanged += txtChisonuoccu_TextChanged;
-            txtChisonuocmoi.TextChanged += txtChisonuocmoi_TextChanged;
-
-            string maKhu = GetCellValue(row, "MaKhu");
-            string maPhong = GetCellValue(row, "MaPhong");
-
-            cboKhuNha.SelectedIndexChanged -= cboKhuNha_SelectedIndexChanged;
-            cboKhuNha.SelectedValue = maKhu;
-            cboKhuNha.SelectedIndexChanged += cboKhuNha_SelectedIndexChanged;
-
-            LoadPhong(maKhu);
-            cboPhong.SelectedValue = maPhong;
-
-            int thang;
-            if (int.TryParse(GetCellValue(row, "Thang"), out thang))
-                cboThang.SelectedItem = thang;
-        }
-
-        private string GetCellValue(DataGridViewRow row, string columnName)
-        {
-            try
+            string maPhong = row.Cells["MaPhong"].Value?.ToString() ?? "";
+            if (!string.IsNullOrEmpty(maPhong))
             {
-                return row.Cells[columnName].Value?.ToString() ?? "";
+                object maKhuObj = _db.ExecuteScalar(
+                    "SELECT MaKhu FROM Phong WHERE MaPhong = @MaPhong",
+                    new SqlParameter("@MaPhong", maPhong));
+                string maKhu = maKhuObj?.ToString() ?? "";
+
+                cboKhuNha.SelectedValue = maKhu;
+                LoadComboPhong(maKhu);
+                cboPhong.SelectedValue = maPhong;
             }
-            catch
+            else
             {
-                return "";
+                cboKhuNha.SelectedIndex = -1;
+                cboPhong.SelectedIndex = -1;
             }
         }
 
-        private DataTable SearchData(string keyword = "")
-        {
-            string sql = @"
-                SELECT d.MaPhieu,
-                       k.TenKhu,
-                       p.SoPhong,
-                       d.Thang,
-                       d.Nam,
-                       d.ChiSoDienCu,
-                       d.ChiSoDienMoi,
-                       d.DienTieuThu,
-                       d.ChiSoNuocCu,
-                       d.ChiSoNuocMoi,
-                       d.NuocTieuThu,
-                       d.TienDien,
-                       d.TienNuoc,
-                       d.TongTien,
-                       p.MaKhu,
-                       d.MaPhong
-                FROM   DienNuoc d
-                JOIN   Phong    p ON p.MaPhong = d.MaPhong
-                JOIN   KhuNha   k ON k.MaKhu   = p.MaKhu
-                WHERE  (@Keyword = N''
-                        OR d.MaPhieu LIKE @Keyword
-                        OR k.TenKhu  LIKE @Keyword
-                        OR p.SoPhong LIKE @Keyword
-                        OR CAST(d.Thang AS NVARCHAR) LIKE @Keyword
-                        OR CAST(d.Nam   AS NVARCHAR) LIKE @Keyword)
-                ORDER  BY d.Nam DESC, d.Thang DESC, d.MaPhieu";
-
-            return _db.ExecuteQuery(sql,
-                new SqlParameter("@Keyword", "%" + keyword + "%"));
-        }
-
-        private bool MaPhieuExists(string maPhieu)
-        {
-            string sql = "SELECT COUNT(*) FROM DienNuoc WHERE MaPhieu = @MaPhieu";
-            return Convert.ToInt32(_db.ExecuteScalar(sql,
-                            new SqlParameter("@MaPhieu", maPhieu))) > 0;
-        }
-
+        // ================================================================
+        // INSERT
+        // ================================================================
         private void InsertData(string maPhieu, string maPhong,
                                 int thang, int nam,
-                                int csDienCu, int csDienMoi, int dienTieuThu,
-                                int csNuocCu, int csNuocMoi, int nuocTieuThu,
-                                int tienDien, int tienNuoc, int tongTien)
+                                int csDienCu, int csDienMoi,
+                                int csNuocCu, int csNuocMoi,
+                                long tienDien, long tienNuoc)
         {
-            string sql = @"
-                INSERT INTO DienNuoc
-                    (MaPhieu, MaPhong, Thang, Nam,
-                     ChiSoDienCu, ChiSoDienMoi, DienTieuThu,
-                     ChiSoNuocCu, ChiSoNuocMoi, NuocTieuThu,
-                     TienDien, TienNuoc, TongTien)
-                VALUES
-                    (@MaPhieu, @MaPhong, @Thang, @Nam,
-                     @ChiSoDienCu, @ChiSoDienMoi, @DienTieuThu,
-                     @ChiSoNuocCu, @ChiSoNuocMoi, @NuocTieuThu,
-                     @TienDien, @TienNuoc, @TongTien)";
+            string sql = @"INSERT INTO DienNuoc
+                               (MaPhieu, MaPhong, Thang, Nam,
+                                ChiSoDienCu, ChiSoDienMoi,
+                                ChiSoNuocCu, ChiSoNuocMoi,
+                                TienDien, TienNuoc, GhiChu)
+                           VALUES
+                               (@MaPhieu, @MaPhong, @Thang, @Nam,
+                                @ChiSoDienCu, @ChiSoDienMoi,
+                                @ChiSoNuocCu, @ChiSoNuocMoi,
+                                @TienDien, @TienNuoc, N'')";
 
             _db.ExecuteNonQuery(sql,
                 new SqlParameter("@MaPhieu", maPhieu),
@@ -563,36 +464,35 @@ namespace Do_an_CongngheNET
                 new SqlParameter("@Nam", nam),
                 new SqlParameter("@ChiSoDienCu", csDienCu),
                 new SqlParameter("@ChiSoDienMoi", csDienMoi),
-                new SqlParameter("@DienTieuThu", dienTieuThu),
                 new SqlParameter("@ChiSoNuocCu", csNuocCu),
                 new SqlParameter("@ChiSoNuocMoi", csNuocMoi),
-                new SqlParameter("@NuocTieuThu", nuocTieuThu),
                 new SqlParameter("@TienDien", tienDien),
-                new SqlParameter("@TienNuoc", tienNuoc),
-                new SqlParameter("@TongTien", tongTien));
+                new SqlParameter("@TienNuoc", tienNuoc));
+
+            MessageBox.Show("Thêm phiếu điện nước thành công!",
+                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // ================================================================
+        // UPDATE
+        // ================================================================
         private void UpdateData(string maPhieu, string maPhong,
                                 int thang, int nam,
-                                int csDienCu, int csDienMoi, int dienTieuThu,
-                                int csNuocCu, int csNuocMoi, int nuocTieuThu,
-                                int tienDien, int tienNuoc, int tongTien)
+                                int csDienCu, int csDienMoi,
+                                int csNuocCu, int csNuocMoi,
+                                long tienDien, long tienNuoc)
         {
-            string sql = @"
-                UPDATE DienNuoc
-                SET    MaPhong      = @MaPhong,
-                       Thang        = @Thang,
-                       Nam          = @Nam,
-                       ChiSoDienCu  = @ChiSoDienCu,
-                       ChiSoDienMoi = @ChiSoDienMoi,
-                       DienTieuThu  = @DienTieuThu,
-                       ChiSoNuocCu  = @ChiSoNuocCu,
-                       ChiSoNuocMoi = @ChiSoNuocMoi,
-                       NuocTieuThu  = @NuocTieuThu,
-                       TienDien     = @TienDien,
-                       TienNuoc     = @TienNuoc,
-                       TongTien     = @TongTien
-                WHERE  MaPhieu = @MaPhieu";
+            string sql = @"UPDATE DienNuoc
+                           SET MaPhong       = @MaPhong,
+                               Thang         = @Thang,
+                               Nam           = @Nam,
+                               ChiSoDienCu   = @ChiSoDienCu,
+                               ChiSoDienMoi  = @ChiSoDienMoi,
+                               ChiSoNuocCu   = @ChiSoNuocCu,
+                               ChiSoNuocMoi  = @ChiSoNuocMoi,
+                               TienDien      = @TienDien,
+                               TienNuoc      = @TienNuoc
+                           WHERE MaPhieu = @MaPhieu";
 
             _db.ExecuteNonQuery(sql,
                 new SqlParameter("@MaPhieu", maPhieu),
@@ -601,25 +501,88 @@ namespace Do_an_CongngheNET
                 new SqlParameter("@Nam", nam),
                 new SqlParameter("@ChiSoDienCu", csDienCu),
                 new SqlParameter("@ChiSoDienMoi", csDienMoi),
-                new SqlParameter("@DienTieuThu", dienTieuThu),
                 new SqlParameter("@ChiSoNuocCu", csNuocCu),
                 new SqlParameter("@ChiSoNuocMoi", csNuocMoi),
-                new SqlParameter("@NuocTieuThu", nuocTieuThu),
                 new SqlParameter("@TienDien", tienDien),
-                new SqlParameter("@TienNuoc", tienNuoc),
-                new SqlParameter("@TongTien", tongTien));
+                new SqlParameter("@TienNuoc", tienNuoc));
+
+            MessageBox.Show("Cập nhật phiếu điện nước thành công!",
+                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // ================================================================
+        // DELETE
+        // ================================================================
         private void DeleteData(string maPhieu)
         {
-            string sql = "DELETE FROM DienNuoc WHERE MaPhieu = @MaPhieu";
-            _db.ExecuteNonQuery(sql, new SqlParameter("@MaPhieu", maPhieu));
+            _db.ExecuteNonQuery("DELETE FROM DienNuoc WHERE MaPhieu = @MaPhieu",
+                new SqlParameter("@MaPhieu", maPhieu));
         }
 
-        private string GetCurrentMaPhieu()
+        // ================================================================
+        // LẤY MÃ PHIẾU CỦA DÒNG ĐANG CHỌN
+        // ================================================================
+        private string GetCurrentID()
         {
             if (dgvNhapdiennuoc.CurrentRow == null) return "";
-            return GetCellValue(dgvNhapdiennuoc.CurrentRow, "MaPhieu");
+            return dgvNhapdiennuoc.CurrentRow.Cells["MaPhieu"].Value?.ToString() ?? "";
         }
+
+        // ================================================================
+        // TẢI COMBOBOX KHU NHÀ
+        // ================================================================
+        private void LoadComboKhuNha()
+        {
+            string sql = "SELECT MaKhu, TenKhu FROM KhuNha WHERE TrangThai = N'Đang sử dụng' ORDER BY TenKhu";
+            DataTable dt = _db.ExecuteQuery(sql);
+
+            DataRow blank = dt.NewRow();
+            blank["MaKhu"] = "";
+            blank["TenKhu"] = "";
+            dt.Rows.InsertAt(blank, 0);
+
+            cboKhuNha.DataSource = dt;
+            cboKhuNha.DisplayMember = "TenKhu";
+            cboKhuNha.ValueMember = "MaKhu";
+            cboKhuNha.SelectedIndex = 0;
+        }
+
+        // ================================================================
+        // TẢI COMBOBOX PHÒNG THEO KHU
+        // ================================================================
+        private void LoadComboPhong(string maKhu)
+        {
+            string sql = @"SELECT MaPhong, SoPhong FROM Phong
+                           WHERE MaKhu = @MaKhu ORDER BY SoPhong";
+            DataTable dt = _db.ExecuteQuery(sql, new SqlParameter("@MaKhu", maKhu));
+
+            DataRow blank = dt.NewRow();
+            blank["MaPhong"] = "";
+            blank["SoPhong"] = "";
+            dt.Rows.InsertAt(blank, 0);
+
+            cboPhong.DataSource = dt;
+            cboPhong.DisplayMember = "SoPhong";
+            cboPhong.ValueMember = "MaPhong";
+            cboPhong.SelectedIndex = 0;
+        }
+
+        // ================================================================
+        // TẢI COMBOBOX THÁNG (1–12)
+        // ================================================================
+        private void LoadComboThang()
+        {
+            cboThang.Items.Clear();
+            for (int i = 1; i <= 12; i++)
+                cboThang.Items.Add(i);
+            cboThang.SelectedIndex = -1;
+        }
+
+        // ================================================================
+        // SỰ KIỆN GIỮ LẠI TỪ DESIGNER
+        // ================================================================
+        private void tlpRoot_Paint(object sender, System.Windows.Forms.PaintEventArgs e) { }
+        private void tlpContent_Paint(object sender, System.Windows.Forms.PaintEventArgs e) { }
+        private void lblTitle_Click(object sender, EventArgs e) { }
     }
 }

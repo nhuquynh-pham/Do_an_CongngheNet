@@ -19,7 +19,7 @@ namespace Do_an_CongngheNET
         // ================================================================
         public DBService()
         {
-            _connectionString = @"Data Source=DESKTOP-UJLMR8A;Initial Catalog=QLKTX;Integrated Security=True;TrustServerCertificate=True";
+            _connectionString = "Server=DESKTOP-3KODLFH;Database=QLKTX;Integrated Security=True;TrustServerCertificate=True;";
         }
 
         // ================================================================
@@ -93,6 +93,32 @@ namespace Do_an_CongngheNET
 
                     conn.Open();
                     return cmd.ExecuteScalar();
+                }
+            }
+        }
+
+        // ================================================================
+        // 5. HÀM THỰC HIỆN NHIỀU CÂU LỆNH TRONG MỘT TRANSACTION
+        // ĐẦU VÀO: Một Action nhận vào SqlConnection và SqlTransaction
+        // ĐẦU RA: Không (ném Exception nếu có lỗi, tự động Rollback)
+        // ================================================================
+        public void ExecuteTransaction(Action<SqlConnection, SqlTransaction> action)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                using (SqlTransaction tran = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        action(conn, tran);
+                        tran.Commit();
+                    }
+                    catch
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
                 }
             }
         }

@@ -6,10 +6,10 @@ using System.Windows.Forms;
 
 namespace Do_an_CongngheNET
 {
-    public partial class Quanlykhunha : Form 
+    public partial class Quanlykhunha : Form
     {
-        private readonly DBService _db; 
-        private SaveMode _saveMode = SaveMode.Insert; 
+        private readonly DBService _db;
+        private SaveMode _saveMode = SaveMode.Insert;
 
         public Quanlykhunha()
         {
@@ -20,40 +20,49 @@ namespace Do_an_CongngheNET
         // ================================================================
         // FORM LOAD
         // ================================================================
-        private void Quanlykhunha_Load(object sender, EventArgs e) 
+        private void Quanlykhunha_Load(object sender, EventArgs e)
         {
+            // Kiểm tra quyền truy cập
+            if (!SessionManager.CoQuyen("CN005"))
+            {
+                MessageBox.Show("Bạn không có quyền truy cập chức năng này!",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.BeginInvoke(new Action(() => this.Close()));
+                return;
+            }
+
             // Khởi tạo ComboBox
-            cboLoaikhu.Items.AddRange(new string[] { "Nam", "Nữ" }); 
-            cboTrangthai.Items.AddRange(new string[] { "Đang sử dụng", "Bảo trì", "Ngưng sử dụng" }); 
+            cboLoaikhu.Items.AddRange(new string[] { "Nam", "Nữ" });
+            cboTrangthai.Items.AddRange(new string[] { "Đang sử dụng", "Bảo trì", "Ngưng sử dụng" });
 
             // txtTongsophong luôn readonly
             txtTongsophong.Enabled = false;
             txtTongsophong.ReadOnly = true;
-           
+
 
             // Trạng thái ban đầu: chỉ xem
-            UIService.SetInputsEnabled(tlplnputs, false); 
-            UIService.SetButtonsEnabled(this, false); 
+            UIService.SetInputsEnabled(tlplnputs, false);
+            UIService.SetButtonsEnabled(this, false);
 
             // Thiết lập style lưới
-            UIService.SetGridStyle(dgvQuanlykhunha); 
+            UIService.SetGridStyle(dgvQuanlykhunha);
 
             // Tải dữ liệu & đặt header cột
-            LoadData(); 
+            LoadData();
             UIService.SetGridHeader(dgvQuanlykhunha,
                 "Mã khu", "Tên khu", "Loại khu", "Số tầng",
-                "Tổng số phòng", "Trạng thái", "Ghi chú"); 
+                "Tổng số phòng", "Trạng thái", "Ghi chú");
         }
 
         // ================================================================
         // THÊM MỚI
         // ================================================================
-        private void btnNew_Click(object sender, EventArgs e) 
+        private void btnNew_Click(object sender, EventArgs e)
         {
-            _saveMode = SaveMode.Insert; 
-            UIService.ClearInputs(tlplnputs); 
-            UIService.SetInputsEnabled(tlplnputs, true); 
-            UIService.SetButtonsEnabled(this, true); 
+            _saveMode = SaveMode.Insert;
+            UIService.ClearInputs(tlplnputs);
+            UIService.SetInputsEnabled(tlplnputs, true);
+            UIService.SetButtonsEnabled(this, true);
 
             // Tổng số phòng luôn readonly
             txtTongsophong.Enabled = false;
@@ -65,13 +74,13 @@ namespace Do_an_CongngheNET
         // ================================================================
         // SỬA
         // ================================================================
-        private void btnEdit_Click(object sender, EventArgs e) 
+        private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (dgvQuanlykhunha.CurrentRow == null) return; 
-            _saveMode = SaveMode.Update; 
-            UIService.SetInputsEnabled(tlplnputs, true); 
+            if (dgvQuanlykhunha.CurrentRow == null) return;
+            _saveMode = SaveMode.Update;
+            UIService.SetInputsEnabled(tlplnputs, true);
 
-            
+
             txtMakhu.Enabled = false;
             txtMakhu.ReadOnly = true;
 
@@ -85,75 +94,75 @@ namespace Do_an_CongngheNET
         // ================================================================
         // XÓA
         // ================================================================
-        private void btnDelete_Click(object sender, EventArgs e) 
+        private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (dgvQuanlykhunha.CurrentRow == null) return; 
-            if (!UIService.ConfirmDelete()) return; 
+            if (dgvQuanlykhunha.CurrentRow == null) return;
+            if (!UIService.ConfirmDelete()) return;
 
-            string maKhu = GetCurrentMaKhu();  
+            string maKhu = GetCurrentMaKhu();
 
             // Kiểm tra nếu đã có phòng thuộc khu này thì không được xóa
-            if (IsUsed(maKhu)) 
+            if (IsUsed(maKhu))
             {
                 MessageBox.Show(
                     "Không thể xóa khu nhà này vì đã có phòng thuộc khu nhà này!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; 
+                return;
             }
 
-            DeleteData(maKhu); 
-            LoadData(); 
+            DeleteData(maKhu);
+            LoadData();
         }
 
         // ================================================================
         // GHI (LƯU)
         // ================================================================
-        private void btnSave_Click(object sender, EventArgs e) 
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!ValidateInput()) return; 
+            if (!ValidateInput()) return;
 
             string maKhu = txtMakhu.Text.Trim();
             string tenKhu = txtTenkhu.Text.Trim();
             string loai = cboLoaikhu.Text;
-            int soTang = int.Parse(txtSotang.Text.Trim()); 
+            int soTang = int.Parse(txtSotang.Text.Trim());
             string tthai = cboTrangthai.Text;
             string ghichu = txtGhichu.Text.Trim();
 
-            if (_saveMode == SaveMode.Insert) 
+            if (_saveMode == SaveMode.Insert)
             {
                 // Kiểm tra trùng mã khu
-                if (MaExists(maKhu)) 
+                if (MaExists(maKhu))
                 {
                     MessageBox.Show("Mã khu đã tồn tại!",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     txtMakhu.Focus();
                     return;
                 }
-                InsertData(maKhu, tenKhu, loai, soTang, tthai, ghichu); 
+                InsertData(maKhu, tenKhu, loai, soTang, tthai, ghichu);
             }
             else
             {
                 if (dgvQuanlykhunha.CurrentRow == null) return;
-                UpdateData(maKhu, tenKhu, loai, soTang, tthai, ghichu); 
+                UpdateData(maKhu, tenKhu, loai, soTang, tthai, ghichu);
             }
 
             LoadData();
             UIService.SetInputsEnabled(tlplnputs, false);
             UIService.SetButtonsEnabled(this, false);
-        } 
+        }
 
         // ================================================================
         // HỦY GHI
         // ================================================================
-        private void btnCancel_Click(object sender, EventArgs e) 
+        private void btnCancel_Click(object sender, EventArgs e)
         {
             UIService.SetInputsEnabled(tlplnputs, false);
             UIService.SetButtonsEnabled(this, false);
-           // Khóa lại ô nhập và đưa nút về trạng thái ban đầu.
+            // Khóa lại ô nhập và đưa nút về trạng thái ban đầu.
             txtTongsophong.Enabled = false;
             txtTongsophong.ReadOnly = true;
 
-            BindData(); 
+            BindData();
         }
 
         // ================================================================
@@ -168,28 +177,28 @@ namespace Do_an_CongngheNET
         // CHỌN DÒNG TRÊN LƯỚI
         // ================================================================
         private void dgvQuanlykhunha_SelectionChanged(object sender, EventArgs e)
-        { 
+        {
             BindData();
-        } 
+        }
 
         // ================================================================
         // TÌM KIẾM (nhấn Enter trên ô tìm kiếm)
         // ================================================================
-        private void txtTimkiemkhu_KeyDown(object sender, KeyEventArgs e) 
+        private void txtTimkiemkhu_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) 
+            if (e.KeyCode == Keys.Enter)
             {
                 LoadData();
                 e.Handled = true;
                 e.SuppressKeyPress = true;
-            } 
+            }
         }
 
         // ================================================================
         // ĐIỀU HƯỚNG BÀN PHÍM TRÊN CÁC Ô NHẬP
         // ================================================================
         private void txtMakhu_KeyDown(object sender, KeyEventArgs e)
-        { 
+        {
             UIService.MoveFocus((Control)sender, e);
         }
 
@@ -221,11 +230,11 @@ namespace Do_an_CongngheNET
         // ================================================================
         // TẢI DỮ LIỆU LÊN LƯỚI
         // ================================================================
-        private void LoadData() 
+        private void LoadData()
         {
             string keyword = txtTimkiemkhu.Text.Trim();
-            dgvQuanlykhunha.DataSource = SearchData(keyword); 
-            
+            dgvQuanlykhunha.DataSource = SearchData(keyword);
+
             if (dgvQuanlykhunha.Columns.Count > 0)
             {
                 dgvQuanlykhunha.Columns["MaKhu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
@@ -235,19 +244,19 @@ namespace Do_an_CongngheNET
                 dgvQuanlykhunha.Columns["TongSoPhong"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 dgvQuanlykhunha.Columns["TrangThai"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 dgvQuanlykhunha.Columns["GhiChu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            } 
+            }
         }
 
         // ================================================================
         // HIỂN THỊ DỮ LIỆU LÊN FORM KHI CHỌN DÒNG
         // ================================================================
-        private void BindData() 
+        private void BindData()
         {
             if (dgvQuanlykhunha.CurrentRow == null)
             {
                 UIService.ClearInputs(tlplnputs);
                 return;
-            } 
+            }
 
             txtMakhu.Text = dgvQuanlykhunha.CurrentRow.Cells["MaKhu"].Value?.ToString() ?? "";
             txtTenkhu.Text = dgvQuanlykhunha.CurrentRow.Cells["TenKhu"].Value?.ToString() ?? "";
@@ -256,20 +265,20 @@ namespace Do_an_CongngheNET
             txtTongsophong.Text = dgvQuanlykhunha.CurrentRow.Cells["TongSoPhong"].Value?.ToString() ?? "";
             cboTrangthai.Text = dgvQuanlykhunha.CurrentRow.Cells["TrangThai"].Value?.ToString() ?? "";
             txtGhichu.Text = dgvQuanlykhunha.CurrentRow.Cells["GhiChu"].Value?.ToString() ?? "";
-        } 
-          
-          // ================================================================
-          // KIỂM TRA DỮ LIỆU ĐẦU VÀO
-          // ================================================================
+        }
+
+        // ================================================================
+        // KIỂM TRA DỮ LIỆU ĐẦU VÀO
+        // ================================================================
         private bool ValidateInput() //Hàm này kiểm tra dữ liệu trước khi lưu
         {
-            if (!UIService.Require(txtMakhu, "Vui lòng nhập Mã khu!")) return false; 
-            if (!UIService.Require(txtTenkhu, "Vui lòng nhập Tên khu!")) return false; 
+            if (!UIService.Require(txtMakhu, "Vui lòng nhập Mã khu!")) return false;
+            if (!UIService.Require(txtTenkhu, "Vui lòng nhập Tên khu!")) return false;
 
-            if (!UIService.MaxLength(txtMakhu, 20, "Mã khu không được quá 20 ký tự!")) return false; 
-            if (!UIService.MaxLength(txtTenkhu, 100, "Tên khu không được quá 100 ký tự!")) return false;  
+            if (!UIService.MaxLength(txtMakhu, 20, "Mã khu không được quá 20 ký tự!")) return false;
+            if (!UIService.MaxLength(txtTenkhu, 100, "Tên khu không được quá 100 ký tự!")) return false;
 
-            if (!UIService.IsNumber(txtSotang, "Số tầng phải là số nguyên!")) return false; 
+            if (!UIService.IsNumber(txtSotang, "Số tầng phải là số nguyên!")) return false;
 
             return true; //Nếu qua hết các kiểm tra thì trả về true, cho phép lưu.
         }
@@ -320,7 +329,7 @@ namespace Do_an_CongngheNET
                                 int soTang, string tthai, string ghichu) //Hàm này thêm khu nhà mới vào database
         {
             string sql = @"INSERT INTO KhuNha (MaKhu, TenKhu, LoaiKhu, SoTang, TongSoPhong, TrangThai, GhiChu)
-                           VALUES (@MaKhu, @TenKhu, @LoaiKhu, @SoTang, 0, @TrangThai, @GhiChu)"; 
+                           VALUES (@MaKhu, @TenKhu, @LoaiKhu, @SoTang, 0, @TrangThai, @GhiChu)";
             //nó thêm vào bảng KhuNha các thông tin: MaKhu, TenKhu, LoaiKhu, SoTang, TongSoPhong (mặc định là 0 khi thêm mới), TrangThai, GhiChu
             _db.ExecuteNonQuery(sql,
                 new SqlParameter("@MaKhu", maKhu),

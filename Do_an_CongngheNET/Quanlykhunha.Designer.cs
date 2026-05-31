@@ -89,6 +89,7 @@
             // 
             // lblTitle
             // 
+            this.lblTitle.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(410, 10);
@@ -123,8 +124,8 @@
             this.tlpLeft.Location = new System.Drawing.Point(3, 3);
             this.tlpLeft.Name = "tlpLeft";
             this.tlpLeft.RowCount = 2;
-            this.tlpLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80.57F));
-            this.tlpLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 19.43F));
+            this.tlpLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 82F));
+            this.tlpLeft.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 18F));
             this.tlpLeft.Size = new System.Drawing.Size(414, 505);
             this.tlpLeft.TabIndex = 0;
             // 
@@ -158,7 +159,7 @@
             this.tlplnputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.29F));
             this.tlplnputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.29F));
             this.tlplnputs.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.29F));
-            this.tlplnputs.Size = new System.Drawing.Size(408, 400);
+            this.tlplnputs.Size = new System.Drawing.Size(408, 408);
             this.tlplnputs.TabIndex = 0;
             // 
             // lblMakhu
@@ -175,7 +176,7 @@
             // txtMakhu
             // 
             this.txtMakhu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMakhu.Location = new System.Drawing.Point(159, 13);
+            this.txtMakhu.Location = new System.Drawing.Point(159, 14);
             this.txtMakhu.Name = "txtMakhu";
             this.txtMakhu.Size = new System.Drawing.Size(246, 30);
             this.txtMakhu.TabIndex = 1;
@@ -185,7 +186,7 @@
             // 
             this.lblTenkhu.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTenkhu.AutoSize = true;
-            this.lblTenkhu.Location = new System.Drawing.Point(33, 73);
+            this.lblTenkhu.Location = new System.Drawing.Point(33, 74);
             this.lblTenkhu.Name = "lblTenkhu";
             this.lblTenkhu.Size = new System.Drawing.Size(90, 25);
             this.lblTenkhu.TabIndex = 0;
@@ -194,7 +195,7 @@
             // txtTenkhu
             // 
             this.txtTenkhu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTenkhu.Location = new System.Drawing.Point(159, 70);
+            this.txtTenkhu.Location = new System.Drawing.Point(159, 72);
             this.txtTenkhu.Name = "txtTenkhu";
             this.txtTenkhu.Size = new System.Drawing.Size(246, 30);
             this.txtTenkhu.TabIndex = 2;
@@ -204,7 +205,7 @@
             // 
             this.lblLoaikhu.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblLoaikhu.AutoSize = true;
-            this.lblLoaikhu.Location = new System.Drawing.Point(32, 130);
+            this.lblLoaikhu.Location = new System.Drawing.Point(32, 132);
             this.lblLoaikhu.Name = "lblLoaikhu";
             this.lblLoaikhu.Size = new System.Drawing.Size(92, 25);
             this.lblLoaikhu.TabIndex = 0;
@@ -214,7 +215,7 @@
             // 
             this.cboLoaikhu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cboLoaikhu.FormattingEnabled = true;
-            this.cboLoaikhu.Location = new System.Drawing.Point(159, 126);
+            this.cboLoaikhu.Location = new System.Drawing.Point(159, 133);
             this.cboLoaikhu.Name = "cboLoaikhu";
             this.cboLoaikhu.Size = new System.Drawing.Size(246, 33);
             this.cboLoaikhu.TabIndex = 3;
@@ -224,7 +225,7 @@
             // 
             this.lblSotang.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblSotang.AutoSize = true;
-            this.lblSotang.Location = new System.Drawing.Point(35, 187);
+            this.lblSotang.Location = new System.Drawing.Point(35, 190);
             this.lblSotang.Name = "lblSotang";
             this.lblSotang.Size = new System.Drawing.Size(86, 25);
             this.lblSotang.TabIndex = 0;
@@ -233,7 +234,7 @@
             // txtSotang
             // 
             this.txtSotang.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSotang.Location = new System.Drawing.Point(159, 184);
+            this.txtSotang.Location = new System.Drawing.Point(159, 188);
             this.txtSotang.Name = "txtSotang";
             this.txtSotang.Size = new System.Drawing.Size(246, 30);
             this.txtSotang.TabIndex = 4;
@@ -243,7 +244,7 @@
             // 
             this.lblTongsophong.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTongsophong.AutoSize = true;
-            this.lblTongsophong.Location = new System.Drawing.Point(3, 244);
+            this.lblTongsophong.Location = new System.Drawing.Point(3, 248);
             this.lblTongsophong.Name = "lblTongsophong";
             this.lblTongsophong.Size = new System.Drawing.Size(150, 25);
             this.lblTongsophong.TabIndex = 0;
@@ -253,7 +254,7 @@
             // 
             this.txtTongsophong.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTongsophong.BackColor = System.Drawing.SystemColors.Window;
-            this.txtTongsophong.Location = new System.Drawing.Point(159, 241);
+            this.txtTongsophong.Location = new System.Drawing.Point(159, 246);
             this.txtTongsophong.Name = "txtTongsophong";
             this.txtTongsophong.ReadOnly = true;
             this.txtTongsophong.Size = new System.Drawing.Size(246, 30);
@@ -263,7 +264,7 @@
             // 
             this.lblTrangthai.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblTrangthai.AutoSize = true;
-            this.lblTrangthai.Location = new System.Drawing.Point(25, 301);
+            this.lblTrangthai.Location = new System.Drawing.Point(25, 306);
             this.lblTrangthai.Name = "lblTrangthai";
             this.lblTrangthai.Size = new System.Drawing.Size(106, 25);
             this.lblTrangthai.TabIndex = 0;
@@ -273,7 +274,7 @@
             // 
             this.cboTrangthai.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cboTrangthai.FormattingEnabled = true;
-            this.cboTrangthai.Location = new System.Drawing.Point(159, 297);
+            this.cboTrangthai.Location = new System.Drawing.Point(159, 307);
             this.cboTrangthai.Name = "cboTrangthai";
             this.cboTrangthai.Size = new System.Drawing.Size(246, 33);
             this.cboTrangthai.TabIndex = 6;
@@ -283,7 +284,7 @@
             // 
             this.lblGhichu.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblGhichu.AutoSize = true;
-            this.lblGhichu.Location = new System.Drawing.Point(35, 358);
+            this.lblGhichu.Location = new System.Drawing.Point(35, 365);
             this.lblGhichu.Name = "lblGhichu";
             this.lblGhichu.Size = new System.Drawing.Size(85, 25);
             this.lblGhichu.TabIndex = 0;
@@ -292,7 +293,7 @@
             // txtGhichu
             // 
             this.txtGhichu.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGhichu.Location = new System.Drawing.Point(159, 349);
+            this.txtGhichu.Location = new System.Drawing.Point(159, 356);
             this.txtGhichu.Multiline = true;
             this.txtGhichu.Name = "txtGhichu";
             this.txtGhichu.Size = new System.Drawing.Size(246, 44);
@@ -312,22 +313,22 @@
             this.tlpButtons.Controls.Add(this.btnCancel, 1, 1);
             this.tlpButtons.Controls.Add(this.btnClose, 2, 1);
             this.tlpButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButtons.Location = new System.Drawing.Point(3, 409);
+            this.tlpButtons.Location = new System.Drawing.Point(3, 417);
             this.tlpButtons.Name = "tlpButtons";
             this.tlpButtons.RowCount = 2;
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButtons.Size = new System.Drawing.Size(408, 93);
+            this.tlpButtons.Size = new System.Drawing.Size(408, 85);
             this.tlpButtons.TabIndex = 1;
             // 
             // btnNew
             // 
-            this.btnNew.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnNew.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNew.Location = new System.Drawing.Point(3, 3);
             this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(129, 40);
+            this.btnNew.Size = new System.Drawing.Size(129, 36);
             this.btnNew.TabIndex = 0;
             this.btnNew.Tag = "select";
             this.btnNew.Text = "Thêm mới";
@@ -336,12 +337,12 @@
             // 
             // btnEdit
             // 
-            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnEdit.Location = new System.Drawing.Point(138, 3);
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(129, 40);
+            this.btnEdit.Size = new System.Drawing.Size(129, 36);
             this.btnEdit.TabIndex = 0;
             this.btnEdit.Tag = "select";
             this.btnEdit.Text = "Sửa";
@@ -350,12 +351,12 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDelete.Location = new System.Drawing.Point(273, 3);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(132, 40);
+            this.btnDelete.Size = new System.Drawing.Size(132, 36);
             this.btnDelete.TabIndex = 0;
             this.btnDelete.Tag = "select";
             this.btnDelete.Text = "Xóa";
@@ -364,12 +365,12 @@
             // 
             // btnSave
             // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(3, 49);
+            this.btnSave.Location = new System.Drawing.Point(3, 45);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(129, 41);
+            this.btnSave.Size = new System.Drawing.Size(129, 37);
             this.btnSave.TabIndex = 0;
             this.btnSave.Tag = "confirm";
             this.btnSave.Text = "Ghi";
@@ -378,12 +379,12 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(138, 49);
+            this.btnCancel.Location = new System.Drawing.Point(138, 45);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(129, 41);
+            this.btnCancel.Size = new System.Drawing.Size(129, 37);
             this.btnCancel.TabIndex = 0;
             this.btnCancel.Tag = "confirm";
             this.btnCancel.Text = "Hủy ghi";
@@ -392,12 +393,12 @@
             // 
             // btnClose
             // 
-            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClose.Location = new System.Drawing.Point(273, 49);
+            this.btnClose.Location = new System.Drawing.Point(273, 45);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(132, 41);
+            this.btnClose.Size = new System.Drawing.Size(132, 37);
             this.btnClose.TabIndex = 0;
             this.btnClose.Tag = "select";
             this.btnClose.Text = "Kết thúc";
@@ -491,7 +492,6 @@
             this.Name = "Quanlykhunha";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Quanlykhunha";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Quanlykhunha_Load);
             this.tlpRoot.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);

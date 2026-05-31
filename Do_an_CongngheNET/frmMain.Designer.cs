@@ -34,7 +34,9 @@
             this.mnuHethong = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuQuanlytaikhoan = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnuPhanquyen = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuQuanlyphanquyen = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparatorVaiTro = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuQuanlyvaitronguoidung = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnuDangnhap = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -96,7 +98,9 @@
             this.mnuHethong.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuQuanlytaikhoan,
             this.toolStripSeparator1,
-            this.mnuPhanquyen,
+            this.mnuQuanlyphanquyen,
+            this.toolStripSeparatorVaiTro,
+            this.mnuQuanlyvaitronguoidung,
             this.toolStripSeparator2,
             this.mnuDangnhap,
             this.toolStripSeparator3,
@@ -113,65 +117,78 @@
             this.mnuQuanlytaikhoan.Image = ((System.Drawing.Image)(resources.GetObject("mnuQuanlytaikhoan.Image")));
             this.mnuQuanlytaikhoan.Name = "mnuQuanlytaikhoan";
             this.mnuQuanlytaikhoan.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.mnuQuanlytaikhoan.Size = new System.Drawing.Size(259, 26);
+            this.mnuQuanlytaikhoan.Size = new System.Drawing.Size(280, 26);
             this.mnuQuanlytaikhoan.Text = "Quản lý tài khoản";
             this.mnuQuanlytaikhoan.Click += new System.EventHandler(this.mnuQuanlytaikhoan_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(256, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(277, 6);
             // 
-            // mnuPhanquyen
+            // mnuQuanlyphanquyen
             // 
-            this.mnuPhanquyen.Image = ((System.Drawing.Image)(resources.GetObject("mnuPhanquyen.Image")));
-            this.mnuPhanquyen.Name = "mnuPhanquyen";
-            this.mnuPhanquyen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
-            this.mnuPhanquyen.Size = new System.Drawing.Size(259, 26);
-            this.mnuPhanquyen.Text = "Phân quyền";
+            this.mnuQuanlyphanquyen.Image = ((System.Drawing.Image)(resources.GetObject("mnuQuanlyphanquyen.Image")));
+            this.mnuQuanlyphanquyen.Name = "mnuQuanlyphanquyen";
+            this.mnuQuanlyphanquyen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.B)));
+            this.mnuQuanlyphanquyen.Size = new System.Drawing.Size(280, 26);
+            this.mnuQuanlyphanquyen.Text = "Quản lý phân quyền";
+            // 
+            // toolStripSeparatorVaiTro
+            // 
+            this.toolStripSeparatorVaiTro.Name = "toolStripSeparatorVaiTro";
+            this.toolStripSeparatorVaiTro.Size = new System.Drawing.Size(277, 6);
+            // 
+            // mnuQuanlyvaitronguoidung
+            // 
+            this.mnuQuanlyvaitronguoidung.Name = "mnuQuanlyvaitronguoidung";
+            this.mnuQuanlyvaitronguoidung.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.mnuQuanlyvaitronguoidung.Size = new System.Drawing.Size(280, 26);
+            this.mnuQuanlyvaitronguoidung.Text = "Quản lý vai trò người dùng";
+            this.mnuQuanlyvaitronguoidung.Click += new System.EventHandler(this.mnuQuanlyvaitronguoidung_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(256, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(277, 6);
             // 
             // mnuDangnhap
             // 
             this.mnuDangnhap.Image = ((System.Drawing.Image)(resources.GetObject("mnuDangnhap.Image")));
             this.mnuDangnhap.Name = "mnuDangnhap";
             this.mnuDangnhap.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.mnuDangnhap.Size = new System.Drawing.Size(259, 26);
+            this.mnuDangnhap.Size = new System.Drawing.Size(280, 26);
             this.mnuDangnhap.Text = "Đăng nhập";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(256, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(277, 6);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(256, 6);
+            this.toolStripSeparator11.Size = new System.Drawing.Size(277, 6);
             // 
             // mnuQuenmatkhau
             // 
             this.mnuQuenmatkhau.Image = ((System.Drawing.Image)(resources.GetObject("mnuQuenmatkhau.Image")));
             this.mnuQuenmatkhau.Name = "mnuQuenmatkhau";
             this.mnuQuenmatkhau.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.mnuQuenmatkhau.Size = new System.Drawing.Size(259, 26);
+            this.mnuQuenmatkhau.Size = new System.Drawing.Size(280, 26);
             this.mnuQuenmatkhau.Text = "Quên mật khẩu";
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(256, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(277, 6);
             // 
             // mnuKetthuc
             // 
             this.mnuKetthuc.Image = ((System.Drawing.Image)(resources.GetObject("mnuKetthuc.Image")));
             this.mnuKetthuc.Name = "mnuKetthuc";
             this.mnuKetthuc.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
-            this.mnuKetthuc.Size = new System.Drawing.Size(259, 26);
+            this.mnuKetthuc.Size = new System.Drawing.Size(280, 26);
             this.mnuKetthuc.Text = "Kết thúc";
             // 
             // mnuQuanly
@@ -453,7 +470,9 @@
         private System.Windows.Forms.ToolStripMenuItem mnuBaocao;
         private System.Windows.Forms.ToolStripMenuItem mnuQuanlytaikhoan;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem mnuPhanquyen;
+        private System.Windows.Forms.ToolStripMenuItem mnuQuanlyphanquyen;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparatorVaiTro;
+        private System.Windows.Forms.ToolStripMenuItem mnuQuanlyvaitronguoidung;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnuDangnhap;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;

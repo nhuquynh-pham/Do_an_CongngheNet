@@ -82,6 +82,30 @@ namespace Do_an_CongngheNET
                 return;
             }
 
+            // ── Lưu thông tin vào Session ──────────────────────────────
+            DataRow row = dt.Rows[0];
+            SessionManager.MaTK = row["MaTK"].ToString().Trim();
+            SessionManager.TenDangNhap = row["TenDangNhap"].ToString();
+            SessionManager.HoTen = row["HoTen"].ToString();
+            SessionManager.TenVaiTro = row["TenVaiTro"].ToString();
+
+            // ── Load quyền theo tài khoản ──────────────────────────────
+            SessionManager.Quyen.Clear();
+            DataTable dtQuyen = _db.ExecuteQuery(
+                @"SELECT MaCN, DuocTruyCap
+                  FROM   tblPHANQUYEN
+                  WHERE  MaTK = @MaTK",
+                new SqlParameter("@MaTK", SessionManager.MaTK));
+
+            foreach (DataRow r in dtQuyen.Rows)
+            {
+                string maCN = r["MaCN"].ToString().Trim();
+                bool duocTruyCap = r["DuocTruyCap"] != DBNull.Value
+                                     && Convert.ToBoolean(r["DuocTruyCap"]);
+                SessionManager.Quyen[maCN] = duocTruyCap;
+            }
+            // ───────────────────────────────────────────────────────────
+
             MessageBox.Show("Đăng nhập hệ thống thành công!",
                 "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -95,13 +119,15 @@ namespace Do_an_CongngheNET
         // PHẦN C – HÀM HELPER
         // ================================================================
 
-        /// <summary>Truy vấn tài khoản theo tên đăng nhập và mật khẩu</summary>
+        /// <summary>Truy vấn tài khoản theo tên đăng nhập và mật khẩu, kèm TenVaiTro</summary>
         private DataTable GetAccount(string tenDangNhap, string matKhau)
         {
-            string sql = @"SELECT * FROM tblTAIKHOAN
-                           WHERE TenDangNhap = @TenDangNhap
-                             AND MatKhau     = @MatKhau
-                             AND TrangThai   = N'Hoạt động'";
+            string sql = @"SELECT tk.*, vt.TenVaiTro
+                           FROM   tblTAIKHOAN tk
+                           INNER JOIN tblVAITRO vt ON tk.MaVaiTro = vt.MaVaiTro
+                           WHERE  tk.TenDangNhap = @TenDangNhap
+                             AND  tk.MatKhau     = @MatKhau
+                             AND  tk.TrangThai   = N'Hoạt động'";
 
             return _db.ExecuteQuery(sql,
                 new SqlParameter("@TenDangNhap", tenDangNhap),
@@ -147,14 +173,8 @@ namespace Do_an_CongngheNET
 
         private void lblQuenmk_Click(object sender, EventArgs e)
         {
-            // TODO: Thêm form Quenmatkhau vào project rồi bỏ comment đoạn dưới
             MessageBox.Show("Chức năng quên mật khẩu chưa được cài đặt.",
                 "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Khi đã có form Quenmatkhau, thay bằng:
-            // Quenmatkhau frmQMK = new Quenmatkhau();
-            // this.Hide();
-            // frmQMK.Show();
         }
 
         // ================================================================
